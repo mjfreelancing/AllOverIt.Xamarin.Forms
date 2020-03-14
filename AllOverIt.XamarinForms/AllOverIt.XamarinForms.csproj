@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AllOverIt" Version="0.1.6" />
+    <PackageReference Include="Xamarin.Forms" Version="4.4.0.991640" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Controls\TitledEntry.xaml.cs">
+      <DependentUpon>TitledEntry.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+</Project>
