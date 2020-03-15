@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+  x:Class="Behaviors.Views.BasicPage"
+  xmlns="http://xamarin.com/schemas/2014/forms"
+  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+  xmlns:aoiBehaviors="clr-namespace:AllOverIt.XamarinForms.Behaviors;assembly=AllOverIt.XamarinForms"
+  xmlns:behaviors="clr-namespace:Behaviors.Behaviors;assembly=Behaviors"
+  xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:viewModels="clr-namespace:Behaviors.ViewModels;assembly=Behaviors"
+  mc:Ignorable="d">
+
+  <ContentPage.BindingContext>
+    <viewModels:BasicPageViewModel />
+  </ContentPage.BindingContext>
+
+  <ContentPage.Resources>
+    <ResourceDictionary>
+      <Style x:Key="NumericValidationStyle" TargetType="Entry">
+        <Style.Setters>
+          <Setter Property="behaviors:NumericValidationAttachableBehavior.AttachBehavior" Value="true" />
+        </Style.Setters>
+      </Style>
+    </ResourceDictionary>
+  </ContentPage.Resources>
+
+  <ContentPage.Behaviors>
+    <aoiBehaviors:EventToCommandBehavior EventName="Appearing">
+      <!--  ContentProperty is 'Commands'  -->
+      <aoiBehaviors:InvokeEventCommand Command="{Binding PageAppearingCommand}" />
+    </aoiBehaviors:EventToCommandBehavior>
+  </ContentPage.Behaviors>
+
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+
+    <StackLayout Grid.Row="0" Padding="10,50,10,0">
+      <Label FontSize="Medium" Text="A behaviour attached to an Entry control" />
+      <Label FontSize="Small" Text="Invalid entries will be displayed in red" />
+      <Entry Placeholder="Enter a System.Double">
+        <Entry.Behaviors>
+          <behaviors:NumericValidationBehavior />
+        </Entry.Behaviors>
+      </Entry>
+    </StackLayout>
+
+    <StackLayout Grid.Row="1" Padding="10,50,10,0">
+      <Label FontSize="Medium" Text="An Entry control styled with a behavior" />
+      <Label FontSize="Small" Text="Invalid entries will be displayed in red" />
+      <Entry Placeholder="Enter a System.Double" Style="{StaticResource NumericValidationStyle}" />
+    </StackLayout>
+
+  </Grid>
+</ContentPage>

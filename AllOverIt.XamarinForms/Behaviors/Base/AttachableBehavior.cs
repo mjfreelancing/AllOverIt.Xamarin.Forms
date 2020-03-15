@@ -3,8 +3,7 @@ using Xamarin.Forms;
 
 namespace AllOverIt.XamarinForms.Behaviors.Base
 {
-  public class AttachableBehavior<TBehavior, TBindable>
-    : BehaviorBase<TBindable>
+  public class AttachableBehavior<TBehavior, TBindable> : BehaviorBase<TBindable>
     where TBehavior : Behavior, new()
     where TBindable : VisualElement
   {
@@ -28,14 +27,6 @@ namespace AllOverIt.XamarinForms.Behaviors.Base
     {
       bindable.SetValue(AttachBehaviorProperty, value);
     }
-
-    //public static readonly BindableProperty AttachBehaviorProperty = BindableProperty.Create(nameof(AttachBehavior), typeof(bool), typeof(TBehavior), false, propertyChanged: OnAttachBehaviorChanged);
-
-    //public bool AttachBehavior
-    //{
-    //  get => (bool)GetValue(AttachBehaviorProperty);
-    //  set => SetValue(AttachBehaviorProperty, value);
-    //}
 
     private static void OnAttachBehaviorChanged(BindableObject bindable, object oldValue, object newValue)
     {
