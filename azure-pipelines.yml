@@ -31,13 +31,13 @@ stages:
       displayName: 'NuGet Restore'
       inputs:
         command: restore
-        projects: '**/*.csproj'
+        projects: '**/AllOverIt*.csproj'
 
     - task: DotNetCoreCLI@2
       displayName: 'Build Solution'
       inputs:
         command: 'build'
-        projects: '**/*.csproj'
+        projects: '**/AllOverIt*.csproj'
         arguments: '--configuration $(buildConfiguration)'
         versioningScheme: byEnvVar
         versionEnvVar: '$(GitVersion.SemVer)'
@@ -46,7 +46,7 @@ stages:
       displayName: 'Run Tests'
       inputs:
         command: test
-        projects: '**/*[Tt]ests/*.csproj'
+        projects: '**/AllOverIt*[Tt]ests/*.csproj'
         arguments: '--configuration $(buildConfiguration) --logger trx /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput="$(Build.SourcesDirectory)/TestResults/Coverage"'
 
     - task: DotNetCoreCLI@2
