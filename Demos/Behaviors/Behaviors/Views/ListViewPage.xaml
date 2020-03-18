@@ -29,7 +29,7 @@
           to the command. If you create the command as a Command<SelectedItemChangedEventArgs> then the command handler will be
           provided the SelectedItemChangedEventArgs instance.
         -->
-        <behaviors:ItemSelectedCommandBehavior Command="{Binding ItemSelectedCommand}" />
+        <behaviors:SelectedItemCommandBehavior Command="{Binding SelectedItemCommand}" />
 
 
         <!--
@@ -38,15 +38,22 @@
           has a Commands property that is the 'ContentProperty' hence it is not explicitly required in the XAML.
         -->
         <!--<behaviors:EventToCommandBehavior EventName="ItemSelected">
-          <behaviors:InvokeEventCommand Command="{Binding ItemSelectedCommand}" />
+          <behaviors:InvokeEventCommand Command="{Binding SelectedItemCommand}" />
         </behaviors:EventToCommandBehavior>-->
 
 
         <!--
           Option 3: Same behavior as option 1 but the SelectedItemChangedEventArgs is converted to the 'SelectedItem' only (from the event args).
-          For this demo, the 'SelectedItem' is a string so the ItemSelectedTextCommand is a Command<string>.
+          For this demo, the 'SelectedItem' is a string so the SelectedItemTextCommand is a Command<string>.
         -->
-        <!--<behaviors:ItemSelectedCommandBehavior Command="{Binding ItemSelectedTextCommand}" Converter="{StaticResource SelectedItemEventArgsConverter}" />-->
+        <!--<behaviors:SelectedItemCommandBehavior Command="{Binding SelectedItemTextCommand}" Converter="{StaticResource SelectedItemEventArgsConverter}" />-->
+
+
+        <!--
+          This clears the current selection each time it is clicked - it is at the end of the list of behaviors so the above
+          behavior gets an opportunity to refresh the labels indicating the currently selected item.
+        -->
+        <behaviors:ClearListViewSelectedItemBehavior />
 
       </ListView.Behaviors>
       <ListView.Header>

@@ -4,9 +4,9 @@ using Xamarin.Forms;
 
 namespace AllOverIt.XamarinForms.Behaviors
 {
-  public class ItemSelectedCommandBehavior : BehaviorBase<ListView>
+  public class SelectedItemCommandBehavior : BehaviorBase<ListView>
   {
-    public static readonly BindableProperty CommandProperty = BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(ItemSelectedCommandBehavior));
+    public static readonly BindableProperty CommandProperty = BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(SelectedItemCommandBehavior));
 
     // refers to a converter for the event args
     public static readonly BindableProperty ConverterProperty = BindableProperty.Create(nameof(Converter), typeof(IValueConverter), typeof(InvokeEventCommand));

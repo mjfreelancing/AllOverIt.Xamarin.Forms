@@ -3,7 +3,8 @@ using Xamarin.Forms;
 
 namespace AllOverIt.XamarinForms.Behaviors
 {
-  public class ClearListViewSelectedItemBehavior : BehaviorBase<ListView>
+  public class ClearListViewSelectedItemBehavior : AttachableBehavior<ClearListViewSelectedItemBehavior, ListView>
+  //: BehaviorBase<ListView>
   {
     protected override void OnAttachedTo(ListView bindable)
     {

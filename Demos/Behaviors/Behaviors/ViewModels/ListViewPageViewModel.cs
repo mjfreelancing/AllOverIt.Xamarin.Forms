@@ -6,8 +6,8 @@ namespace Behaviors.ViewModels
 {
   public class ListViewPageViewModel : ViewModelBase
   {
-    public ICommand ItemSelectedCommand { get; }        // see ListViewPage, used with behavior options 1 and 2
-    public ICommand ItemSelectedTextCommand { get; }    // see ListViewPage, used with behavior option 3
+    public ICommand SelectedItemCommand { get; }        // see ListViewPage, used with behavior options 1 and 2
+    public ICommand SelectedItemTextCommand { get; }    // see ListViewPage, used with behavior option 3
 
     private string _selectedItemText;
     public string SelectedItemText
@@ -26,19 +26,26 @@ namespace Behaviors.ViewModels
     public ListViewPageViewModel()
     {
       // used with behavior options 1 and 2
-      ItemSelectedCommand = new Command<SelectedItemChangedEventArgs>(OnItemSelectedCommand);
+      SelectedItemCommand = new Command<SelectedItemChangedEventArgs>(OnSelectedItemCommand);
 
       // used with behavior option 3
-      ItemSelectedTextCommand = new Command<string>(OnItemSelectedTextCommand);
+      SelectedItemTextCommand = new Command<string>(OnSelectedItemTextCommand);
     }
 
-    private void OnItemSelectedCommand(SelectedItemChangedEventArgs args)
+    private void OnSelectedItemCommand(SelectedItemChangedEventArgs args)
     {
+      // ListViewPage includes a 'ClearListViewSelectedItemBehavior' - don't clear out the selected info when
+      // this behavior clears the current selection.
+      if (args.SelectedItem == null)
+      {
+        return;
+      }
+
       SelectedItemText = (string)args.SelectedItem;
       SelectedItemIndex = args.SelectedItemIndex;
     }
 
-    private void OnItemSelectedTextCommand(string selectedItemText)
+    private void OnSelectedItemTextCommand(string selectedItemText)
     {
       SelectedItemText = selectedItemText;
       //SelectedItemIndex is not available when using behavior option 3
