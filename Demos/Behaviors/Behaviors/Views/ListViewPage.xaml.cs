@@ -4,9 +4,9 @@ using Xamarin.Forms.Xaml;
 namespace Behaviors.Views
 {
   [XamlCompilation(XamlCompilationOptions.Compile)]
-  public partial class BasicPage : ContentPage
+  public partial class ListViewPage : ContentPage
   {
-    public BasicPage()
+    public ListViewPage()
     {
       InitializeComponent();
     }

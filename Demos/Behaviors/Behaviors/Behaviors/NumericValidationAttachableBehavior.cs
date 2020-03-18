@@ -1,4 +1,5 @@
-﻿using AllOverIt.XamarinForms.Behaviors.Base;
+﻿using AllOverIt.XamarinForms.Behaviors;
+using AllOverIt.XamarinForms.Behaviors.Base;
 using Xamarin.Forms;
 
 namespace Behaviors.Behaviors

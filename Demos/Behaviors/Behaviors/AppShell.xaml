@@ -31,12 +31,12 @@
   </Shell.Resources>
 
   <TabBar>
-    <Tab Title="Basic" Icon="tab_feed.png">
-      <ShellContent ContentTemplate="{DataTemplate local:BasicPage}" />
+    <Tab Title="Entry" Icon="tab_feed.png">
+      <ShellContent ContentTemplate="{DataTemplate local:EntryPage}" />
     </Tab>
-    <!--<Tab Title="Basic" Icon="tab_feed.png">
-      <ShellContent ContentTemplate="{DataTemplate local:BasicPage}" />
-    </Tab>-->
+    <Tab Title="ListView" Icon="tab_feed.png">
+      <ShellContent ContentTemplate="{DataTemplate local:ListViewPage}" />
+    </Tab>
   </TabBar>
 
 </Shell>

@@ -1,8 +1,9 @@
-﻿using Xamarin.Forms;
+﻿using AllOverIt.XamarinForms.Behaviors.Base;
+using Xamarin.Forms;
 
 namespace AllOverIt.XamarinForms.Behaviors
 {
-  public class ClearListViewSelectedItemBehavior : Behavior<ListView>
+  public class ClearListViewSelectedItemBehavior : BehaviorBase<ListView>
   {
     protected override void OnAttachedTo(ListView bindable)
     {
@@ -13,14 +14,14 @@ namespace AllOverIt.XamarinForms.Behaviors
 
     protected override void OnDetachingFrom(ListView bindable)
     {
-      base.OnDetachingFrom(bindable);
-
       bindable.ItemSelected -= ListView_ItemSelected;
+
+      base.OnDetachingFrom(bindable);
     }
 
-    private static void ListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+    private void ListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
     {
-      ((ListView)sender).SelectedItem = null;
+      AssociatedObject.SelectedItem = null;
     }
   }
 }

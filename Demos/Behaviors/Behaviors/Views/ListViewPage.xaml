@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+  x:Class="Behaviors.Views.ListViewPage"
+  xmlns="http://xamarin.com/schemas/2014/forms"
+  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+  xmlns:behaviors="clr-namespace:AllOverIt.XamarinForms.Behaviors;assembly=AllOverIt.XamarinForms"
+  xmlns:converters="clr-namespace:AllOverIt.XamarinForms.Converters;assembly=AllOverIt.XamarinForms"
+  xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:viewModels="clr-namespace:Behaviors.ViewModels;assembly=Behaviors"
+  mc:Ignorable="d">
+
+  <ContentPage.BindingContext>
+    <viewModels:ListViewPageViewModel />
+  </ContentPage.BindingContext>
+
+  <ContentPage.Resources>
+    <ResourceDictionary>
+      <converters:SelectedItemEventArgsConverter x:Key="SelectedItemEventArgsConverter" />
+    </ResourceDictionary>
+  </ContentPage.Resources>
+
+  <StackLayout Margin="20">
+    <ListView SeparatorColor="LightSlateGray">
+      <ListView.Behaviors>
+
+        <!--
+          Option 1: This behavior subscribes to the 'ItemSelected' event and passes the SelectedItemChangedEventArgs event argument
+          to the command. If you create the command as a Command<SelectedItemChangedEventArgs> then the command handler will be
+          provided the SelectedItemChangedEventArgs instance.
+        -->
+        <behaviors:ItemSelectedCommandBehavior Command="{Binding ItemSelectedCommand}" />
+
+
+        <!--
+          Option 2: This behavior will subscribe to the 'ItemSelected' event (as per the EventName property). When the event is triggered,
+          the event args (SelectedItemChangedEventArgs in this case) will be passed to each attached Command. Note, the EventToCommandBehavior
+          has a Commands property that is the 'ContentProperty' hence it is not explicitly required in the XAML.
+        -->
+        <!--<behaviors:EventToCommandBehavior EventName="ItemSelected">
+          <behaviors:InvokeEventCommand Command="{Binding ItemSelectedCommand}" />
+        </behaviors:EventToCommandBehavior>-->
+
+
+        <!--
+          Option 3: Same behavior as option 1 but the SelectedItemChangedEventArgs is converted to the 'SelectedItem' only (from the event args).
+          For this demo, the 'SelectedItem' is a string so the ItemSelectedTextCommand is a Command<string>.
+        -->
+        <!--<behaviors:ItemSelectedCommandBehavior Command="{Binding ItemSelectedTextCommand}" Converter="{StaticResource SelectedItemEventArgsConverter}" />-->
+
+      </ListView.Behaviors>
+      <ListView.Header>
+        <Label
+          Margin="0,0,0,16"
+          FontAttributes="Bold"
+          FontSize="Large"
+          Text="Pick A Planet" />
+      </ListView.Header>
+      <ListView.ItemsSource>
+        <x:Array Type="{x:Type x:String}">
+          <x:String>The Sun</x:String>
+          <x:String>Mercury</x:String>
+          <x:String>Venus</x:String>
+          <x:String>Earth</x:String>
+          <x:String>Mars</x:String>
+          <x:String>Jupiter</x:String>
+          <x:String>Saturn</x:String>
+          <x:String>Uranus</x:String>
+          <x:String>Neptune</x:String>
+        </x:Array>
+      </ListView.ItemsSource>
+      <ListView.ItemTemplate>
+        <DataTemplate>
+          <ViewCell>
+            <Label
+              Text="{Binding .}"
+              TextColor="#121212"
+              VerticalTextAlignment="Center" />
+          </ViewCell>
+        </DataTemplate>
+      </ListView.ItemTemplate>
+    </ListView>
+    <StackLayout Orientation="Horizontal">
+      <Label
+        FontAttributes="Bold"
+        FontSize="Medium"
+        Text="Selected Item:"
+        VerticalTextAlignment="Center" />
+      <Label
+        FontSize="Medium"
+        Text="{Binding SelectedItemText}"
+        VerticalTextAlignment="Center" />
+    </StackLayout>
+    <StackLayout Orientation="Horizontal">
+      <Label
+        FontAttributes="Bold"
+        FontSize="Medium"
+        Text="Selected Index:"
+        VerticalTextAlignment="Center" />
+      <Label
+        FontSize="Medium"
+        Text="{Binding SelectedItemIndex}"
+        VerticalTextAlignment="Center" />
+    </StackLayout>
+  </StackLayout>
+
+</ContentPage>

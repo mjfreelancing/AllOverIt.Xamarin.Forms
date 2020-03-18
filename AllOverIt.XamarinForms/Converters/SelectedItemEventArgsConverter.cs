@@ -4,7 +4,7 @@ using Xamarin.Forms;
 
 namespace AllOverIt.XamarinForms.Converters
 {
-  public class SelectedItemEventArgsToSelectedItemConverter : IValueConverter
+  public class SelectedItemEventArgsConverter : IValueConverter
   {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {

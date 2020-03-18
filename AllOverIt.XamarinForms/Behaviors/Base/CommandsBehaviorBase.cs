@@ -9,7 +9,6 @@ namespace AllOverIt.XamarinForms.Behaviors.Base
   {
     public static readonly BindableProperty CommandsProperty = BindableProperty.Create(nameof(Commands), typeof(IList<EventCommand>), typeof(CommandsBehaviorBase<TBindable>));
 
-    //public EventCommandCollection Commands => (EventCommandCollection)GetValue(CommandsProperty);
     public IList<EventCommand> Commands => (IList<EventCommand>)GetValue(CommandsProperty);
 
     public CommandsBehaviorBase()

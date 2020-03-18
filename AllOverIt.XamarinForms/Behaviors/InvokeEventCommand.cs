@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using AllOverIt.XamarinForms.Behaviors.Base;
+using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace AllOverIt.XamarinForms.Behaviors

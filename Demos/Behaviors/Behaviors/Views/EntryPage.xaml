@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+  x:Class="Behaviors.Views.EntryPage"
+  xmlns="http://xamarin.com/schemas/2014/forms"
+  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+  xmlns:aoiBehaviors="clr-namespace:AllOverIt.XamarinForms.Behaviors;assembly=AllOverIt.XamarinForms"
+  xmlns:behaviors="clr-namespace:Behaviors.Behaviors;assembly=Behaviors"
+  xmlns:controls="clr-namespace:AllOverIt.XamarinForms.Controls;assembly=AllOverIt.XamarinForms"
+  xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:viewModels="clr-namespace:Behaviors.ViewModels;assembly=Behaviors"
+  Title="Entry Page"
+  mc:Ignorable="d">
+
+  <ContentPage.BindingContext>
+    <viewModels:EntryPageViewModel />
+  </ContentPage.BindingContext>
+
+  <ContentPage.Resources>
+    <ResourceDictionary>
+      <Style x:Key="NumericValidationStyle" TargetType="Entry">
+        <Style.Setters>
+          <Setter Property="behaviors:NumericValidationAttachableBehavior.AttachBehavior" Value="true" />
+        </Style.Setters>
+      </Style>
+
+      <x:String x:Key="CurrencyFormat">{0:c}</x:String>
+    </ResourceDictionary>
+  </ContentPage.Resources>
+
+  <ContentPage.Behaviors>
+    <!--  EventToCommandBehavior.ContentProperty is 'Commands'  -->
+    <aoiBehaviors:EventToCommandBehavior EventName="Appearing">
+      <aoiBehaviors:InvokeEventCommand Command="{Binding PageAppearingCommand}" />
+    </aoiBehaviors:EventToCommandBehavior>
+    <aoiBehaviors:EventToCommandBehavior EventName="Disappearing">
+      <aoiBehaviors:InvokeEventCommand Command="{Binding PageDisappearingCommand}" />
+    </aoiBehaviors:EventToCommandBehavior>
+  </ContentPage.Behaviors>
+
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+
+    <controls:Separator Grid.Row="0" Margin="0,20" />
+
+    <StackLayout Grid.Row="1" Padding="10,10">
+      <Label
+        FontAttributes="Bold"
+        FontSize="Medium"
+        Text="Using a numeric validation behaviour" />
+      <Label FontSize="Small" Text="Invalid entries will be displayed in red" />
+      <Entry BackgroundColor="Beige" Placeholder="Enter a number here">
+        <Entry.Behaviors>
+          <aoiBehaviors:NumericValidationBehavior />
+        </Entry.Behaviors>
+      </Entry>
+    </StackLayout>
+
+    <StackLayout Grid.Row="2" Padding="10,10">
+      <Label
+        FontAttributes="Bold"
+        FontSize="Medium"
+        Text="Using a style attached validation behaviour" />
+      <Label FontSize="Small" Text="Invalid entries will be displayed in red" />
+      <Entry
+        BackgroundColor="Beige"
+        Placeholder="Enter a number here"
+        Style="{StaticResource NumericValidationStyle}" />
+    </StackLayout>
+
+    <StackLayout Grid.Row="3" Padding="10,10">
+      <Label
+        FontAttributes="Bold"
+        FontSize="Medium"
+        Text="String changes format when focused" />
+      <Label FontSize="Small" Text="Invalid entries will be displayed in red" />
+      <Entry BackgroundColor="Beige" Placeholder="Enter a number here">
+        <Entry.Behaviors>
+          <!--  'Amount' is a property on the EntryPageViewModel  -->
+          <aoiBehaviors:EntryStringFormatBehavior Path="Amount" UnfocusedFormat="{StaticResource CurrencyFormat}" />
+          <aoiBehaviors:NumericValidationBehavior />
+        </Entry.Behaviors>
+      </Entry>
+    </StackLayout>
+
+    <controls:Separator Grid.Row="4" Margin="0,20" />
+
+  </Grid>
+</ContentPage>

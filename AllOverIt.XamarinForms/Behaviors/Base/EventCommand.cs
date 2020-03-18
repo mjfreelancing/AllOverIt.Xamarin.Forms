@@ -1,7 +1,6 @@
-﻿using AllOverIt.XamarinForms.Behaviors.Base;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 
-namespace AllOverIt.XamarinForms.Behaviors
+namespace AllOverIt.XamarinForms.Behaviors.Base
 {
   /// <summary>
   /// An abstract, bindable, class that represents a command handler for an event.
