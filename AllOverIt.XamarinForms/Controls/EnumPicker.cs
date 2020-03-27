@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Globalization;
+using System.Linq;
 using Xamarin.Forms;
 
 namespace AllOverIt.XamarinForms.Controls
 {
   public class EnumPicker : Picker
   {
-    public static readonly BindableProperty EnumTypeProperty = BindableProperty.Create(nameof(EnumType), typeof(Type), typeof(EnumPicker), propertyChanged: HandleEnumTypeChanged);
+    public static readonly BindableProperty EnumTypeProperty = BindableProperty.Create(nameof(EnumType), typeof(Type), typeof(EnumPicker), propertyChanged: OnEnumTypeChanged);
 
     public Type EnumType
     {
@@ -13,7 +15,15 @@ namespace AllOverIt.XamarinForms.Controls
       set => SetValue(EnumTypeProperty, value);
     }
 
-    private static void HandleEnumTypeChanged(BindableObject bindable, object oldValue, object newValue)
+    public static readonly BindableProperty DisplayItemConverterProperty = BindableProperty.Create(nameof(DisplayItemConverter), typeof(IValueConverter), typeof(EnumPicker));
+
+    public IValueConverter DisplayItemConverter
+    {
+      get => (IValueConverter)GetValue(DisplayItemConverterProperty);
+      set => SetValue(DisplayItemConverterProperty, value);
+    }
+
+    private static void OnEnumTypeChanged(BindableObject bindable, object oldValue, object newValue)
     {
       if (!(bindable is EnumPicker picker))
       {
@@ -26,13 +36,23 @@ namespace AllOverIt.XamarinForms.Controls
       }
       else
       {
-        
-        if (!typeof(Type).IsEnum)
+        var newType = (Type) newValue;
+
+        if(!newType.IsEnum)
         {
           throw new ArgumentException("The EnumType property must be an enumeration type");
         }
 
-        picker.ItemsSource = Enum.GetNames((Type)newValue);
+        var items = Enum.GetNames(newType).ToList();
+
+        if (picker.DisplayItemConverter != null)
+        {
+          items = items
+            .Select(item => (string)picker.DisplayItemConverter.Convert(item, typeof(string), null, CultureInfo.InvariantCulture))
+            .ToList();
+        }
+
+        picker.ItemsSource = items;
       }
     }
   }

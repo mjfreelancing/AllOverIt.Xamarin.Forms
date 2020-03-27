@@ -6,20 +6,21 @@ namespace AllOverIt.XamarinForms.Behaviors
   public class EntryStringFormatBehavior : AttachableBehavior<EntryStringFormatBehavior, Entry>
   {
     public static readonly BindableProperty PathProperty = BindableProperty.Create(nameof(Path), typeof(string), typeof(EntryStringFormatBehavior));
-    public static readonly BindableProperty FocusedFormatProperty = BindableProperty.Create(nameof(FocusedFormat), typeof(string), typeof(EntryStringFormatBehavior));
-    public static readonly BindableProperty UnfocusedFormatProperty = BindableProperty.Create(nameof(UnfocusedFormat), typeof(string), typeof(EntryStringFormatBehavior));
-
     public string Path
     {
       get => (string)GetValue(PathProperty);
       set => SetValue(PathProperty, value);
     }
 
+    public static readonly BindableProperty FocusedFormatProperty = BindableProperty.Create(nameof(FocusedFormat), typeof(string), typeof(EntryStringFormatBehavior));
+
     public string FocusedFormat
     {
       get => (string)GetValue(FocusedFormatProperty);
       set => SetValue(FocusedFormatProperty, value);
     }
+
+    public static readonly BindableProperty UnfocusedFormatProperty = BindableProperty.Create(nameof(UnfocusedFormat), typeof(string), typeof(EntryStringFormatBehavior));
 
     public string UnfocusedFormat
     {

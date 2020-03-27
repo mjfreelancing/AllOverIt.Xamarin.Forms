@@ -6,7 +6,7 @@ using Xamarin.Forms.Xaml;
 
 namespace AllOverIt.XamarinForms.Controls
 {
-  // based on https://progrunning.net/creating-custom-xamarin-forms-loading-indicator-with-animations/
+  // Inspired by https://progrunning.net/creating-custom-xamarin-forms-loading-indicator-with-animations/
   //
   [XamlCompilation(XamlCompilationOptions.Compile)]
   public partial class ActivitySpinner
@@ -15,20 +15,6 @@ namespace AllOverIt.XamarinForms.Controls
     private const uint DefaultFadeDuration = 400;
 
     public static readonly BindableProperty IsLoadingProperty = BindableProperty.Create(nameof(IsLoading), typeof(bool), typeof(ActivitySpinner), default(bool), propertyChanged: OnIsLoadingPropertyChanged);
-    public static readonly BindableProperty IndicatorColorProperty = BindableProperty.Create(nameof(IndicatorColor), typeof(Color), typeof(ActivitySpinner), default(Color), propertyChanged: OnIndicatorColorPropertyChanged);
-    public static readonly BindableProperty TextProperty = BindableProperty.Create(nameof(Text), typeof(string), typeof(ActivitySpinner), default(string), propertyChanged: OnTextPropertyChanged);
-    public static readonly BindableProperty TextColorProperty = BindableProperty.Create(nameof(TextColor), typeof(Color), typeof(ActivitySpinner), default(Color), propertyChanged: OnTextColorPropertyChanged);
-    public static readonly BindableProperty TextFontFamilyProperty = BindableProperty.Create(nameof(TextFontFamily), typeof(string), typeof(ActivitySpinner), default(string), propertyChanged: OnTextFontFamilyPropertyChanged);
-    public static readonly BindableProperty TextFontSizeProperty = BindableProperty.Create(nameof(TextFontSize), typeof(double), typeof(ActivitySpinner), default(double), propertyChanged: OnTextFontSizePropertyChanged);
-    public static readonly BindableProperty TextFontAttributesProperty = BindableProperty.Create(nameof(TextFontAttributes), typeof(FontAttributes), typeof(ActivitySpinner), default(FontAttributes), propertyChanged: OnTextFontAttributesPropertyChanged);
-    public static readonly BindableProperty FadeDurationProperty = BindableProperty.Create(nameof(FadeDuration), typeof(uint), typeof(ActivitySpinner), DefaultFadeDuration, propertyChanged: OnFadeDurationPropertyChanged);
-
-    public ActivitySpinner()
-    {
-      InitializeComponent();
-
-      Spinner.SetBinding(ActivityIndicator.ColorProperty, new Binding(nameof(IndicatorColorProperty)));
-    }
 
     public bool IsLoading
     {
@@ -36,11 +22,15 @@ namespace AllOverIt.XamarinForms.Controls
       set => SetValue(IsLoadingProperty, value);
     }
 
+    public static readonly BindableProperty IndicatorColorProperty = BindableProperty.Create(nameof(IndicatorColor), typeof(Color), typeof(ActivitySpinner), default(Color));
+
     public Color IndicatorColor
     {
       get => (Color)GetValue(IndicatorColorProperty);
       set => SetValue(IndicatorColorProperty, value);
     }
+    
+    public static readonly BindableProperty TextProperty = BindableProperty.Create(nameof(Text), typeof(string), typeof(ActivitySpinner), default(string), propertyChanged: OnTextPropertyChanged);
 
     public string Text
     {
@@ -48,11 +38,15 @@ namespace AllOverIt.XamarinForms.Controls
       set => SetValue(TextProperty, value);
     }
 
+    public static readonly BindableProperty TextColorProperty = BindableProperty.Create(nameof(TextColor), typeof(Color), typeof(ActivitySpinner), default(Color));
+
     public Color TextColor
     {
       get => (Color)GetValue(TextColorProperty);
       set => SetValue(TextColorProperty, value);
     }
+
+    public static readonly BindableProperty TextFontFamilyProperty = BindableProperty.Create(nameof(TextFontFamily), typeof(string), typeof(ActivitySpinner), default(string));
 
     public string TextFontFamily
     {
@@ -60,17 +54,23 @@ namespace AllOverIt.XamarinForms.Controls
       set => SetValue(TextFontFamilyProperty, value);
     }
 
+    public static readonly BindableProperty TextFontSizeProperty = BindableProperty.Create(nameof(TextFontSize), typeof(double), typeof(ActivitySpinner), default(double));
+
     public double TextFontSize
     {
       get => (double)GetValue(TextFontSizeProperty);
       set => SetValue(TextFontSizeProperty, value);
     }
+    
+    public static readonly BindableProperty TextFontAttributesProperty = BindableProperty.Create(nameof(TextFontAttributes), typeof(FontAttributes), typeof(ActivitySpinner), default(FontAttributes));
 
-    public double TextFontAttributes
+    public FontAttributes TextFontAttributes
     {
-      get => (double)GetValue(TextFontAttributesProperty);
+      get => (FontAttributes)GetValue(TextFontAttributesProperty);
       set => SetValue(TextFontAttributesProperty, value);
     }
+    
+    public static readonly BindableProperty FadeDurationProperty = BindableProperty.Create(nameof(FadeDuration), typeof(uint), typeof(ActivitySpinner), DefaultFadeDuration);
 
     public uint FadeDuration
     {
@@ -78,16 +78,38 @@ namespace AllOverIt.XamarinForms.Controls
       set => SetValue(FadeDurationProperty, value);
     }
 
-    private static async void OnIsLoadingPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+    public ActivitySpinner()
     {
-      await SetIndicatorProperty<bool>(bindable, newValue,
-        async (activitySpinner, propertyValue) => await ToggleVisibility(activitySpinner));
+      InitializeComponent();
+
+      SetActivityBindings();
+      SetLabelBindings();
     }
 
-    private static void OnIndicatorColorPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+    private void SetActivityBindings()
     {
-      SetIndicatorProperty<Color>(bindable, newValue,
-        (activitySpinner, propertyValue) => activitySpinner.Spinner.Color = propertyValue);
+      // bind properties from this control to the ActivityIndicator
+      Spinner.BindingContext = this;
+      Spinner.SetBinding(ActivityIndicator.ColorProperty, nameof(IndicatorColor));
+    }
+
+    private void SetLabelBindings()
+    {
+      // bind properties from this control to the Label
+      SpinnerText.BindingContext = this;
+      SpinnerText.SetBinding(Label.TextColorProperty, nameof(TextColor));
+      SpinnerText.SetBinding(Label.FontSizeProperty, nameof(TextFontSize));
+      SpinnerText.SetBinding(Label.FontFamilyProperty, nameof(TextFontFamily));
+      SpinnerText.SetBinding(Label.FontAttributesProperty, nameof(TextFontAttributes));
+    }
+
+    private static async void OnIsLoadingPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+      await SetIndicatorPropertyAsync<bool>(bindable, newValue,
+        async (activitySpinner, propertyValue) =>
+        {
+          await ToggleVisibility(activitySpinner);
+        });
     }
 
     private static void OnTextPropertyChanged(BindableObject bindable, object oldValue, object newValue)
@@ -103,34 +125,6 @@ namespace AllOverIt.XamarinForms.Controls
         });
     }
 
-    private static void OnTextColorPropertyChanged(BindableObject bindable, object oldValue, object newValue)
-    {
-      SetIndicatorProperty<Color>(bindable, newValue,
-        (activitySpinner, propertyValue) => activitySpinner.SpinnerText.TextColor = propertyValue);
-    }
-    private static void OnTextFontFamilyPropertyChanged(BindableObject bindable, object oldValue, object newValue)
-    {
-      SetIndicatorProperty<string>(bindable, newValue,
-        (activitySpinner, propertyValue) => activitySpinner.SpinnerText.FontFamily = propertyValue);
-    }
-
-    private static void OnTextFontSizePropertyChanged(BindableObject bindable, object oldValue, object newValue)
-    {
-      SetIndicatorProperty<double>(bindable, newValue,
-        (activitySpinner, propertyValue) => activitySpinner.SpinnerText.FontSize = propertyValue);
-    }
-
-    private static void OnTextFontAttributesPropertyChanged(BindableObject bindable, object oldValue, object newValue)
-    {
-      SetIndicatorProperty<FontAttributes>(bindable, newValue,
-        (activitySpinner, propertyValue) => activitySpinner.SpinnerText.FontAttributes = propertyValue);
-    }
-
-    private static void OnFadeDurationPropertyChanged(BindableObject bindable, object oldValue, object newValue)
-    {
-      //
-    }
-
     private static void SetIndicatorProperty<TPropertyType>(BindableObject bindable, object newValue, Action<ActivitySpinner, TPropertyType> propertyAssigner)
     {
       if (!(bindable is ActivitySpinner activitySpinner) || !(newValue is TPropertyType propertyValue))
@@ -141,7 +135,7 @@ namespace AllOverIt.XamarinForms.Controls
       propertyAssigner.Invoke(activitySpinner, propertyValue);
     }
 
-    private static async Task SetIndicatorProperty<TPropertyType>(BindableObject bindable, object newValue, Func<ActivitySpinner, TPropertyType, Task> propertyAssigner)
+    private static async Task SetIndicatorPropertyAsync<TPropertyType>(BindableObject bindable, object newValue, Func<ActivitySpinner, TPropertyType, Task> propertyAssigner)
     {
       if (!(bindable is ActivitySpinner activitySpinner) || !(newValue is TPropertyType propertyValue))
       {

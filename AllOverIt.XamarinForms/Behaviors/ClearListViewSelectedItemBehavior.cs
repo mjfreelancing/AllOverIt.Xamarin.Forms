@@ -4,7 +4,6 @@ using Xamarin.Forms;
 namespace AllOverIt.XamarinForms.Behaviors
 {
   public class ClearListViewSelectedItemBehavior : AttachableBehavior<ClearListViewSelectedItemBehavior, ListView>
-  //: BehaviorBase<ListView>
   {
     protected override void OnAttachedTo(ListView bindable)
     {
@@ -20,7 +19,7 @@ namespace AllOverIt.XamarinForms.Behaviors
       base.OnDetachingFrom(bindable);
     }
 
-    private void ListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+    private void ListView_ItemSelected(object sender, SelectedItemChangedEventArgs args)
     {
       AssociatedObject.SelectedItem = null;
     }

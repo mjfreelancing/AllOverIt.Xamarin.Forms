@@ -37,6 +37,9 @@
     <Tab Title="ListView" Icon="tab_feed.png">
       <ShellContent ContentTemplate="{DataTemplate local:ListViewPage}" />
     </Tab>
+    <Tab Title="Controls" Icon="tab_feed.png">
+      <ShellContent ContentTemplate="{DataTemplate local:ControlsPage}" />
+    </Tab>
   </TabBar>
 
 </Shell>

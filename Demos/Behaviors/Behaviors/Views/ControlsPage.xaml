@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+  x:Class="Behaviors.Views.ControlsPage"
+  xmlns="http://xamarin.com/schemas/2014/forms"
+  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+  xmlns:behaviors="clr-namespace:AllOverIt.XamarinForms.Behaviors;assembly=AllOverIt.XamarinForms"
+  xmlns:controls="clr-namespace:AllOverIt.XamarinForms.Controls;assembly=AllOverIt.XamarinForms"
+  xmlns:converters="clr-namespace:AllOverIt.XamarinForms.Converters;assembly=AllOverIt.XamarinForms"
+  xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:viewModels="clr-namespace:Behaviors.ViewModels;assembly=Behaviors"
+  mc:Ignorable="d">
+
+  <ContentPage.BindingContext>
+    <viewModels:ControlsPageViewModel />
+  </ContentPage.BindingContext>
+
+  <ContentPage.Resources>
+    <ResourceDictionary>
+      <converters:EnumToStringConverter
+        x:Key="SplitWordsConverter"
+        x:TypeArguments="viewModels:Period"
+        SplitWords="True" />
+
+      <Style BasedOn="{StaticResource SeparatorStyle}" TargetType="BoxView">
+        <Setter Property="Margin" Value="0,16" />
+      </Style>
+      <Style x:Key="EnumPickerTitle" TargetType="Label">
+        <Setter Property="FontSize" Value="24" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="TextColor" Value="Blue" />
+      </Style>
+      <Style TargetType="controls:EnumPicker">
+        <Setter Property="BackgroundColor" Value="Beige" />
+      </Style>
+    </ResourceDictionary>
+  </ContentPage.Resources>
+
+  <StackLayout Margin="16">
+    <BoxView />
+    <controls:ActivitySpinner
+      x:Name="Spinner"
+      IndicatorColor="Aquamarine"
+      IsLoading="{Binding LookBusy}"
+      Text="All Over It !!!"
+      TextColor="Purple"
+      TextFontAttributes="Bold,Italic"
+      TextFontSize="18" />
+    <BoxView>
+      <BoxView.Triggers>
+        <DataTrigger
+          Binding="{Binding Source={x:Reference Spinner}, Path=IsVisible}"
+          TargetType="BoxView"
+          Value="False">
+          <Setter Property="IsVisible" Value="False" />
+        </DataTrigger>
+      </BoxView.Triggers>
+    </BoxView>
+    <controls:TitledEntry
+      BackgroundColor="Beige"
+      EntryFontAttributes="Italic"
+      EntryFontSize="20"
+      EntryIsEnabled="True"
+      EntryIsTextPredictionEnabled="True"
+      EntryPlaceholder="Enter 'AllOverIt' to appear busy"
+      TitleFontAttributes="Bold"
+      TitleFontSize="24"
+      TitleText="Titled Entry"
+      TitleTextColor="Blue">
+      <controls:TitledEntry.Behaviors>
+        <behaviors:EventToCommandBehavior EventName="EntryFocused">
+          <behaviors:InvokeEventCommand Command="{Binding EntryFocusedCommand}" />
+        </behaviors:EventToCommandBehavior>
+        <behaviors:EventToCommandBehavior EventName="EntryTextChanged">
+          <behaviors:InvokeEventCommand Command="{Binding EntryTextChangedCommand}" />
+        </behaviors:EventToCommandBehavior>
+        <behaviors:EventToCommandBehavior EventName="EntryUnfocused">
+          <behaviors:InvokeEventCommand Command="{Binding EntryUnfocusedCommand}" />
+        </behaviors:EventToCommandBehavior>
+      </controls:TitledEntry.Behaviors>
+    </controls:TitledEntry>
+    <BoxView />
+    <Label Style="{StaticResource EnumPickerTitle}" Text="Select a Title:" />
+    <controls:EnumPicker Title="Title" EnumType="{x:Type viewModels:PersonTitle}" />
+    <BoxView />
+    <Label Style="{StaticResource EnumPickerTitle}" Text="Select a Period:" />
+    <controls:EnumPicker
+      Title="Period"
+      DisplayItemConverter="{StaticResource SplitWordsConverter}"
+      EnumType="{x:Type viewModels:Period}" />
+    <BoxView />
+  </StackLayout>
+</ContentPage>

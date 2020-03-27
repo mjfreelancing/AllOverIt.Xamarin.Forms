@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AllOverIt.XamarinForms.Mvvm;
+using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -7,23 +8,11 @@ namespace AllOverIt.XamarinForms.Controls
   [XamlCompilation(XamlCompilationOptions.Compile)]
   public partial class TitledEntry : ContentView
   {
-    public static readonly BindableProperty TitleTextProperty = BindableProperty.Create(nameof(TitleText), typeof(string), typeof(TitledEntry), default(string), propertyChanged: OnTitleTextPropertyChanged);
-    public static readonly BindableProperty TitleTextColorProperty = BindableProperty.Create(nameof(TitleTextColor), typeof(Color), typeof(TitledEntry), default(Color), propertyChanged: OnTitleTextColorPropertyChanged);
-    public static readonly BindableProperty TitleFontSizeProperty = BindableProperty.Create(nameof(TitleText), typeof(int), typeof(TitledEntry), default(int), propertyChanged: OnTitleFontSizePropertyChanged);
-    public static readonly BindableProperty TitleFontFamilyProperty = BindableProperty.Create(nameof(TitleFontFamily), typeof(string), typeof(TitledEntry), default(string), propertyChanged: OnTitleFontFamilyPropertyChanged);
-    public static readonly BindableProperty TitleFontAttributesProperty = BindableProperty.Create(nameof(TitleFontAttributes), typeof(FontAttributes), typeof(TitledEntry), default(FontAttributes), propertyChanged: OnTitleFontAttributesPropertyChanged);
-
-    // ?? forward properties of the same name as 'Entry' since this is the primary purpose of the control
-    // ... but this has implications because 'IsEnabled' could be for the composite or the Entry, or both
-    // go with new properties for now :-)
-    public static readonly BindableProperty EntryTextProperty = BindableProperty.Create(nameof(EntryText), typeof(string), typeof(TitledEntry), default(string), BindingMode.TwoWay, propertyChanged: OnEntryTextPropertyChanged);
-    public static readonly BindableProperty EntryTextColorProperty = BindableProperty.Create(nameof(EntryTextColor), typeof(Color), typeof(TitledEntry), default(Color), propertyChanged: OnEntryTextColorPropertyChanged);
-    public static readonly BindableProperty EntryFontSizeProperty = BindableProperty.Create(nameof(EntryText), typeof(int), typeof(TitledEntry), default(int), propertyChanged: OnEntryFontSizePropertyChanged);
-    public static readonly BindableProperty EntryFontFamilyProperty = BindableProperty.Create(nameof(EntryFontFamily), typeof(string), typeof(TitledEntry), default(string), propertyChanged: OnEntryFontFamilyPropertyChanged);
-    public static readonly BindableProperty EntryFontAttributesProperty = BindableProperty.Create(nameof(EntryFontAttributes), typeof(FontAttributes), typeof(TitledEntry), default(FontAttributes), propertyChanged: OnEntryFontAttributesPropertyChanged);
-    public static readonly BindableProperty EntryIsEnabledProperty = BindableProperty.Create(nameof(EntryIsEnabled), typeof(bool), typeof(TitledEntry), true, BindingMode.TwoWay, propertyChanged: OnEntryIsEnabledPropertyChanged);
+    private readonly WeakEventManager _eventManager = new WeakEventManager();
 
     #region Title properties
+
+    public static readonly BindableProperty TitleTextProperty = BindableProperty.Create(nameof(TitleText), typeof(string), typeof(TitledEntry), default(string));
 
     public string TitleText
     {
@@ -31,23 +20,32 @@ namespace AllOverIt.XamarinForms.Controls
       set => SetValue(TitleTextProperty, value);
     }
 
+    public static readonly BindableProperty TitleTextColorProperty = BindableProperty.Create(nameof(TitleTextColor), typeof(Color), typeof(TitledEntry), default(Color));
+    
     public Color TitleTextColor
     {
       get => (Color)GetValue(TitleTextColorProperty);
       set => SetValue(TitleTextColorProperty, value);
     }
 
-    public int TitleFontSize
+    public static readonly BindableProperty TitleFontSizeProperty = BindableProperty.Create(nameof(TitleFontSize), typeof(double), typeof(TitledEntry), default(double));
+
+    [TypeConverter(typeof(FontSizeConverter))]
+    public double TitleFontSize
     {
-      get => (int)GetValue(TitleFontSizeProperty);
+      get => (double)GetValue(TitleFontSizeProperty);
       set => SetValue(TitleFontSizeProperty, value);
     }
 
+    public static readonly BindableProperty TitleFontFamilyProperty = BindableProperty.Create(nameof(TitleFontFamily), typeof(string), typeof(TitledEntry), default(string));
+    
     public string TitleFontFamily
     {
       get => (string)GetValue(TitleFontFamilyProperty);
       set => SetValue(TitleFontFamilyProperty, value);
     }
+
+    public static readonly BindableProperty TitleFontAttributesProperty = BindableProperty.Create(nameof(TitleFontAttributes), typeof(FontAttributes), typeof(TitledEntry), default(FontAttributes));
 
     public FontAttributes TitleFontAttributes
     {
@@ -59,46 +57,112 @@ namespace AllOverIt.XamarinForms.Controls
 
     #region Entry properties
 
+    public static readonly BindableProperty EntryTextProperty = BindableProperty.Create(nameof(EntryText), typeof(string), typeof(TitledEntry), default(string), BindingMode.TwoWay);
+
     public string EntryText
     {
       get => (string)GetValue(EntryTextProperty);
       set => SetValue(EntryTextProperty, value);
     }
 
+    public static readonly BindableProperty EntryTextColorProperty = BindableProperty.Create(nameof(EntryTextColor), typeof(Color), typeof(TitledEntry), default(Color));
+    
     public Color EntryTextColor
     {
       get => (Color)GetValue(EntryTextColorProperty);
       set => SetValue(EntryTextColorProperty, value);
     }
 
-    public int EntryFontSize
+    public static readonly BindableProperty EntryPlaceholderProperty = BindableProperty.Create(nameof(EntryPlaceholder), typeof(string), typeof(TitledEntry), default(string));
+
+    public string EntryPlaceholder
     {
-      get => (int)GetValue(EntryFontSizeProperty);
+      get => (string)GetValue(EntryPlaceholderProperty);
+      set => SetValue(EntryPlaceholderProperty, value);
+    }
+
+    public static readonly BindableProperty EntryPlaceholderColorProperty = BindableProperty.Create(nameof(EntryPlaceholderColor), typeof(Color), typeof(TitledEntry), default(Color));
+
+    public Color EntryPlaceholderColor
+    {
+      get => (Color)GetValue(EntryPlaceholderColorProperty);
+      set => SetValue(EntryPlaceholderColorProperty, value);
+    }
+
+    public static readonly BindableProperty EntryFontSizeProperty = BindableProperty.Create(nameof(EntryFontSize), typeof(double), typeof(TitledEntry), default(double));
+
+    [TypeConverter(typeof(FontSizeConverter))]
+    public double EntryFontSize
+    {
+      get => (double)GetValue(EntryFontSizeProperty);
       set => SetValue(EntryFontSizeProperty, value);
     }
 
+    public static readonly BindableProperty EntryFontFamilyProperty = BindableProperty.Create(nameof(EntryFontFamily), typeof(string), typeof(TitledEntry), default(string));
+    
     public string EntryFontFamily
     {
       get => (string)GetValue(EntryFontFamilyProperty);
       set => SetValue(EntryFontFamilyProperty, value);
     }
 
+    public static readonly BindableProperty EntryFontAttributesProperty = BindableProperty.Create(nameof(EntryFontAttributes), typeof(FontAttributes), typeof(TitledEntry), default(FontAttributes));
+    
     public FontAttributes EntryFontAttributes
     {
       get => (FontAttributes)GetValue(EntryFontAttributesProperty);
       set => SetValue(EntryFontAttributesProperty, value);
     }
 
+    public static readonly BindableProperty EntryIsTextPredictionEnabledProperty = BindableProperty.Create(nameof(EntryIsTextPredictionEnabled), typeof(bool), typeof(TitledEntry), false);
+
+    public bool EntryIsTextPredictionEnabled
+    {
+      get => (bool)GetValue(EntryIsTextPredictionEnabledProperty);
+      set => SetValue(EntryIsTextPredictionEnabledProperty, value);
+    }
+
+    public static readonly BindableProperty EntryIsEnabledProperty = BindableProperty.Create(nameof(EntryIsEnabled), typeof(bool), typeof(TitledEntry), true);
+    
     public bool EntryIsEnabled
     {
       get => (bool)GetValue(EntryIsEnabledProperty);
       set => SetValue(EntryIsEnabledProperty, value);
     }
 
+    public bool EntryIsFocused => InputEntry.IsFocused;
+
+    public static readonly BindableProperty EntryIsPasswordProperty = BindableProperty.Create(nameof(EntryIsPassword), typeof(bool), typeof(TitledEntry), false);
+
+    public bool EntryIsPassword
+    {
+      get => (bool)GetValue(EntryIsPasswordProperty);
+      set => SetValue(EntryIsPasswordProperty, value);
+    }
+
     #endregion
 
-    public event EventHandler<FocusEventArgs> OnEntryFocused;
+    #region Entry events
 
+    public event EventHandler<FocusEventArgs> EntryFocused
+    {
+      add => _eventManager.AddEventHandler(value);
+      remove => _eventManager.RemoveEventHandler(value);
+    }
+
+    public event EventHandler<FocusEventArgs> EntryUnfocused
+    {
+      add => _eventManager.AddEventHandler(value);
+      remove => _eventManager.RemoveEventHandler(value);
+    }
+
+    public event EventHandler<TextChangedEventArgs> EntryTextChanged
+    {
+      add => _eventManager.AddEventHandler(value);
+      remove => _eventManager.RemoveEventHandler(value);
+    }
+
+    #endregion
 
     public TitledEntry()
     {
@@ -109,116 +173,71 @@ namespace AllOverIt.XamarinForms.Controls
     {
       base.OnParentSet();
 
-      EntryTitle.Text = TitleText;
-      EntryTitle.TextColor = TitleTextColor;
-      EntryTitle.FontSize = TitleFontSize;
-      EntryTitle.FontFamily = TitleFontFamily;
-      EntryTitle.FontAttributes = TitleFontAttributes;
+      SetTitleBindings();
+      SetEntryBindings();
+      SetEntryEventHandlers();
+    }
 
-      InputEntry.Text = EntryText;
-      InputEntry.TextColor = EntryTextColor;
-      InputEntry.FontSize = EntryFontSize;
-      InputEntry.FontFamily = EntryFontFamily;
-      InputEntry.FontAttributes = EntryFontAttributes;
-      InputEntry.IsEnabled = EntryIsEnabled;
+    private void SetTitleBindings()
+    {
+      // bind properties from this control to the Label
+      EntryTitle.BindingContext = this;
+      EntryTitle.SetBinding(Label.TextProperty, nameof(TitleText));
+      EntryTitle.SetBinding(Label.TextColorProperty, nameof(TitleTextColor));
+      EntryTitle.SetBinding(Label.FontSizeProperty, nameof(TitleFontSize));
+      EntryTitle.SetBinding(Label.FontFamilyProperty, nameof(TitleFontFamily));
+      EntryTitle.SetBinding(Label.FontAttributesProperty, nameof(TitleFontAttributes));
+    }
 
-      InputEntry.TextChanged += OnTextChanged;
+    private void SetEntryBindings()
+    {
+      // bind properties from this control to the Entry
+      InputEntry.BindingContext = this;
+      InputEntry.SetBinding(Entry.TextProperty, nameof(EntryText));
+      InputEntry.SetBinding(Entry.TextColorProperty, nameof(EntryTextColor));
+      InputEntry.SetBinding(Entry.FontSizeProperty, nameof(EntryFontSize));
+      InputEntry.SetBinding(Entry.FontFamilyProperty, nameof(EntryFontFamily));
+      InputEntry.SetBinding(Entry.FontAttributesProperty, nameof(EntryFontAttributes));
+      InputEntry.SetBinding(Entry.IsEnabledProperty, nameof(EntryIsEnabled));
+      InputEntry.SetBinding(Entry.PlaceholderProperty, nameof(EntryPlaceholder));
+      InputEntry.SetBinding(Entry.PlaceholderColorProperty, nameof(EntryPlaceholderColor));
+      InputEntry.SetBinding(Entry.IsTextPredictionEnabledProperty, nameof(EntryIsTextPredictionEnabled));
+      InputEntry.SetBinding(Entry.IsPasswordProperty, nameof(EntryIsPassword));
+    }
+
+    private void SetEntryEventHandlers()
+    {
+      InputEntry.TextChanged += (sender, args) =>
+      {
+        OnEntryTextChanged(args);
+      };
 
       InputEntry.Focused += (sender, args) =>
       {
-        OnEntryFocused?.Invoke(sender, args);
+        OnEntryFocused(args);
+      };
+
+      InputEntry.Unfocused += (sender, args) =>
+      {
+        OnEntryUnfocused(args);
       };
     }
 
-    // ?? if we should propagate any of the VisualElement properties, such as IsEnabled, to the Entry control
-    // or have a different 'EntryIsEnabled' property
-    //protected override void OnPropertyChanged(string propertyName = null)
-    //{
-    //  base.OnPropertyChanged(propertyName);
+    private void OnEntryFocused(FocusEventArgs args)
+    {
+      _eventManager.HandleEvent(this, args, nameof(EntryFocused));
+    }
 
-    //  if (propertyName == nameof(IsEnabled))
-    //  {
-    //    InputEntry.IsEnabled = IsEnabled;
-    //  }
-    //}
+    private void OnEntryUnfocused(FocusEventArgs args)
+    {
+      _eventManager.HandleEvent(this, args, nameof(EntryUnfocused));
+    }
 
-    private void OnTextChanged(object sender, TextChangedEventArgs args)
+    private void OnEntryTextChanged(TextChangedEventArgs args)
     {
       EntryText = args.NewTextValue;
+
+      _eventManager.HandleEvent(this, args, nameof(EntryTextChanged));
     }
-
-    #region Title PropertyChanged handlers
-
-    private static void OnTitleTextPropertyChanged(BindableObject bindable, object oldValue, object newValue)
-    {
-      SetControlProperty<string>(bindable, newValue, (entry, value) => { entry.EntryTitle.Text = value; });
-    }
-
-    private static void OnTitleTextColorPropertyChanged(BindableObject bindable, object oldValue, object newValue)
-    {
-      SetControlProperty<Color>(bindable, newValue, (entry, value) => { entry.EntryTitle.TextColor = value; });
-    }
-
-    private static void OnTitleFontSizePropertyChanged(BindableObject bindable, object oldValue, object newValue)
-    {
-      SetControlProperty<int>(bindable, newValue, (entry, value) => { entry.EntryTitle.FontSize = value; });
-    }
-
-    private static void OnTitleFontFamilyPropertyChanged(BindableObject bindable, object oldValue, object newValue)
-    {
-      SetControlProperty<string>(bindable, newValue, (entry, value) => { entry.EntryTitle.FontFamily = value; });
-    }
-
-    private static void OnTitleFontAttributesPropertyChanged(BindableObject bindable, object oldValue, object newValue)
-    {
-      SetControlProperty<FontAttributes>(bindable, newValue, (entry, value) => { entry.EntryTitle.FontAttributes = value; });
-    }
-
-    #endregion
-
-    #region Entry PropertyChanged handlers
-
-    private static void OnEntryTextPropertyChanged(BindableObject bindable, object oldValue, object newValue)
-    {
-      SetControlProperty<string>(bindable, newValue, (entry, value) => { entry.InputEntry.Text = value; });
-    }
-
-    private static void OnEntryTextColorPropertyChanged(BindableObject bindable, object oldValue, object newValue)
-    {
-      SetControlProperty<Color>(bindable, newValue, (entry, value) => { entry.InputEntry.TextColor = value; });
-    }
-
-    private static void OnEntryFontSizePropertyChanged(BindableObject bindable, object oldValue, object newValue)
-    {
-      SetControlProperty<int>(bindable, newValue, (entry, value) => { entry.InputEntry.FontSize = value; });
-    }
-
-    private static void OnEntryFontFamilyPropertyChanged(BindableObject bindable, object oldValue, object newValue)
-    {
-      SetControlProperty<string>(bindable, newValue, (entry, value) => { entry.InputEntry.FontFamily = value; });
-    }
-
-    private static void OnEntryFontAttributesPropertyChanged(BindableObject bindable, object oldValue, object newValue)
-    {
-      SetControlProperty<FontAttributes>(bindable, newValue, (entry, value) => { entry.InputEntry.FontAttributes = value; });
-    }
-
-    private static void OnEntryIsEnabledPropertyChanged(BindableObject bindable, object oldValue, object newValue)
-    {
-      SetControlProperty<bool>(bindable, newValue, (entry, value) => { entry.InputEntry.IsEnabled = value; });
-    }
-
-    #endregion
-
-    private static void SetControlProperty<TPropertyType>(BindableObject bindable, object newValue, Action<TitledEntry, TPropertyType> propertyAssigner)
-    {
-      if (!(bindable is TitledEntry entry) || !(newValue is TPropertyType propertyValue))
-      {
-        return;
-      }
-
-      propertyAssigner.Invoke(entry, propertyValue);
-    }
-
   }
 }

@@ -13,7 +13,7 @@ namespace AllOverIt.XamarinForms.Behaviors
   [ContentProperty("Commands")]
   public class EventToCommandBehavior : CommandsBehaviorBase<VisualElement>
   {
-    private Delegate _eventHandler;
+    private Delegate? _eventHandler;
 
     public static readonly BindableProperty EventNameProperty = BindableProperty.Create(nameof(EventName), typeof(string), typeof(EventToCommandBehavior), propertyChanged: OnEventNameChanged);
 

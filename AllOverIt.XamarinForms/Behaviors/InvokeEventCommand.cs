@@ -7,13 +7,6 @@ namespace AllOverIt.XamarinForms.Behaviors
   public sealed class InvokeEventCommand : EventCommand
   {
     public static readonly BindableProperty CommandProperty = BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(InvokeEventCommand));
-    
-    // if the event raised has an event args then this is passed to the command instead of this command parameter
-    public static readonly BindableProperty CommandParameterProperty = BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(InvokeEventCommand));
-
-    // refers to a converter for the event args
-    public static readonly BindableProperty ConverterProperty = BindableProperty.Create(nameof(Converter), typeof(IValueConverter), typeof(InvokeEventCommand));
-    public static readonly BindableProperty ConverterParameterProperty = BindableProperty.Create(nameof(ConverterParameter), typeof(object), typeof(InvokeEventCommand));
 
     public ICommand Command
     {
@@ -21,17 +14,26 @@ namespace AllOverIt.XamarinForms.Behaviors
       set => SetValue(CommandProperty, value);
     }
 
+    // if the event raised has an event args then this is passed to the command instead of this command parameter
+    public static readonly BindableProperty CommandParameterProperty = BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(InvokeEventCommand));
+
     public object CommandParameter
     {
       get => GetValue(CommandParameterProperty);
       set => SetValue(CommandParameterProperty, value);
     }
 
+
+    // refers to a converter for the event args
+    public static readonly BindableProperty ConverterProperty = BindableProperty.Create(nameof(Converter), typeof(IValueConverter), typeof(InvokeEventCommand));
+
     public IValueConverter Converter
     {
       get => (IValueConverter)GetValue(ConverterProperty);
       set => SetValue(ConverterProperty, value);
     }
+
+    public static readonly BindableProperty ConverterParameterProperty = BindableProperty.Create(nameof(ConverterParameter), typeof(object), typeof(InvokeEventCommand));
 
     public object ConverterParameter
     {

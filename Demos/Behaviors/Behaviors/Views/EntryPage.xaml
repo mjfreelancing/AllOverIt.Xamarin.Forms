@@ -5,7 +5,6 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
   xmlns:aoiBehaviors="clr-namespace:AllOverIt.XamarinForms.Behaviors;assembly=AllOverIt.XamarinForms"
   xmlns:behaviors="clr-namespace:Behaviors.Behaviors;assembly=Behaviors"
-  xmlns:controls="clr-namespace:AllOverIt.XamarinForms.Controls;assembly=AllOverIt.XamarinForms"
   xmlns:d="http://xamarin.com/schemas/2014/forms/design"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:viewModels="clr-namespace:Behaviors.ViewModels;assembly=Behaviors"
@@ -47,7 +46,10 @@
       <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
 
-    <controls:Separator Grid.Row="0" Margin="0,20" />
+    <BoxView
+      Grid.Row="0"
+      Margin="0,20"
+      Style="{StaticResource SeparatorStyle}" />
 
     <StackLayout Grid.Row="1" Padding="10,10">
       <Label
@@ -89,7 +91,10 @@
       </Entry>
     </StackLayout>
 
-    <controls:Separator Grid.Row="4" Margin="0,20" />
+    <BoxView
+      Grid.Row="4"
+      Margin="0,20"
+      Style="{StaticResource SeparatorStyle}" />
 
   </Grid>
 </ContentPage>

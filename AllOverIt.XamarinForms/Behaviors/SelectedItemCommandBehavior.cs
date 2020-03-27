@@ -8,22 +8,22 @@ namespace AllOverIt.XamarinForms.Behaviors
   {
     public static readonly BindableProperty CommandProperty = BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(SelectedItemCommandBehavior));
 
-    // refers to a converter for the event args
-    public static readonly BindableProperty ConverterProperty = BindableProperty.Create(nameof(Converter), typeof(IValueConverter), typeof(InvokeEventCommand));
-    public static readonly BindableProperty ConverterParameterProperty = BindableProperty.Create(nameof(ConverterParameter), typeof(object), typeof(InvokeEventCommand));
-
-
     public ICommand Command
     {
       get => (ICommand)GetValue(CommandProperty);
       set => SetValue(CommandProperty, value);
     }
 
+    // refers to a converter for the event args
+    public static readonly BindableProperty ConverterProperty = BindableProperty.Create(nameof(Converter), typeof(IValueConverter), typeof(SelectedItemCommandBehavior));
+
     public IValueConverter Converter
     {
       get => (IValueConverter)GetValue(ConverterProperty);
       set => SetValue(ConverterProperty, value);
     }
+
+    public static readonly BindableProperty ConverterParameterProperty = BindableProperty.Create(nameof(ConverterParameter), typeof(object), typeof(SelectedItemCommandBehavior));
 
     public object ConverterParameter
     {
