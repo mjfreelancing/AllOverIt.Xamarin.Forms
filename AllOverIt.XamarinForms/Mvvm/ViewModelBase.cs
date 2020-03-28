@@ -29,7 +29,6 @@ namespace AllOverIt.XamarinForms.Mvvm
     }
 
     protected ViewModelBase()
-      : this(null)
     {
     }
 

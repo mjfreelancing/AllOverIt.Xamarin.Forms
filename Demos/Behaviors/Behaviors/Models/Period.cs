@@ -1,4 +1,4 @@
-﻿namespace Behaviors.ViewModels
+﻿namespace Behaviors.Models
 {
   public enum Period
   {

@@ -14,11 +14,11 @@ namespace AllOverIt.XamarinForms.Mvvm
   {
     private struct Subscription
     {
-      public readonly WeakReference? Subscriber;
+      public readonly WeakReference Subscriber;
       public readonly MethodInfo Handler;
 
       // a null subscriber indicates a static method
-      public Subscription(WeakReference? subscriber, MethodInfo handler)
+      public Subscription(WeakReference subscriber, MethodInfo handler)
       {
         Subscriber = subscriber;
         Handler = handler ?? throw new ArgumentNullException(nameof(handler));
@@ -82,7 +82,7 @@ namespace AllOverIt.XamarinForms.Mvvm
         return;
       }
 
-      var toRaise = new List<(object? subscriber, MethodInfo handler)>();
+      var toRaise = new List<(object subscriber, MethodInfo handler)>();
       var toRemove = new List<Subscription>();
 
       foreach (var subscription in target)
@@ -170,7 +170,10 @@ namespace AllOverIt.XamarinForms.Mvvm
       }
 
       // when handlerTarget is null, the event handler is a static method
-      var subscriber = handlerTarget == null ? null : new WeakReference(handlerTarget);
+      var subscriber = handlerTarget == null
+        ? null 
+        : new WeakReference(handlerTarget);
+
       targets.Add(new Subscription(subscriber, methodInfo));
     }
 

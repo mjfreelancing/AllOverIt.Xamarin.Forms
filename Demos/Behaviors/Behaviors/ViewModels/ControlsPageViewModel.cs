@@ -1,10 +1,9 @@
-﻿using AllOverIt.XamarinForms.Mvvm;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace Behaviors.ViewModels
 {
-  public class ControlsPageViewModel : ViewModelBase
+  public class ControlsPageViewModel : BehaviorViewModelBase
   {
     private bool _lookBusy;
 
@@ -20,29 +19,35 @@ namespace Behaviors.ViewModels
 
     public ControlsPageViewModel()
     {
+      Logger.Debug($"Initialising {nameof(ControlsPageViewModel)}");
+
       EntryFocusedCommand = new Command<FocusEventArgs>(OnEntryFocused);
       EntryUnfocusedCommand = new Command<FocusEventArgs>(OnEntryUnfocused);
       EntryTextChangedCommand = new Command<TextChangedEventArgs>(OnEntryTextChanged);
+
+      Logger.Debug($"{nameof(ControlsPageViewModel)} is initialised");
     }
 
     // ControlsPage has a behaviour that calls this command when the EntryFocused event is raised
-    private void OnEntryFocused(FocusEventArgs obj)
+    private void OnEntryFocused(FocusEventArgs args)
     {
-      // not doing anything in this demo
+      Logger.Debug("An Entry control has received focus");
     }
 
     // ControlsPage has a behaviour that calls this command when the EntryUnfocused event is raised
-    private void OnEntryUnfocused(FocusEventArgs obj)
+    private void OnEntryUnfocused(FocusEventArgs args)
     {
-      // not doing anything in this demo
+      Logger.Debug("An Entry control has lost focus");
     }
 
     // ControlsPage has a behaviour that calls this command when the EntryTextChanged event is raised
-    private void OnEntryTextChanged(TextChangedEventArgs obj)
+    private void OnEntryTextChanged(TextChangedEventArgs args)
     {
-      var currentText = obj.NewTextValue.ToLower();
+      var currentText = args.NewTextValue.ToLower();
 
       LookBusy = currentText == "alloverit";
+
+      Logger.Debug($"Current Entry text = '{currentText}', looking busy = {_lookBusy}");
     }
   }
 }

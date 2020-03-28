@@ -6,22 +6,22 @@ namespace AllOverIt.XamarinForms.Logging
 {
   public abstract class LoggerBase : ILogger
   {
-    private readonly BlockingCollection<(string LevelTag, string Message)> _logMessages;
+    private readonly BlockingCollection<(string Level, string Message)> _logMessages;
 
-    protected string AppTag { get; }
+    protected string Tag { get; }
 
-    protected LoggerBase(string appTag)
+    protected LoggerBase(string tag)
     {
-      AppTag = appTag;
+      Tag = tag;
 
       _logMessages = new BlockingCollection<(string, string)>();
 
       // don't bother disposing of tasks : https://devblogs.microsoft.com/pfxteam/do-i-need-to-dispose-of-tasks/
       Task.Factory.StartNew(() =>
       {
-        foreach (var message in _logMessages.GetConsumingEnumerable())
+        foreach (var (level, message) in _logMessages.GetConsumingEnumerable())
         {
-          LogMessage(message.LevelTag, message.Message);
+          LogMessage(level, message);
         }
       }, CancellationToken.None, TaskCreationOptions.LongRunning, TaskScheduler.Default);
     }
@@ -36,7 +36,7 @@ namespace AllOverIt.XamarinForms.Logging
       Dispose(true);
     }
 
-    protected abstract void LogMessage(string levelTag, string message);
+    protected abstract void LogMessage(string level, string message);
 
     protected virtual void Dispose(bool disposing)
     {
@@ -46,9 +46,10 @@ namespace AllOverIt.XamarinForms.Logging
       }
     }
 
-    private void DoLog(string levelTag, string message)
+    private void DoLog(string level, string message)
     {
-      var logMessage = (levelTag, message);
+      var logMessage = (level, message);
+
       _logMessages.Add(logMessage);
     }
   }

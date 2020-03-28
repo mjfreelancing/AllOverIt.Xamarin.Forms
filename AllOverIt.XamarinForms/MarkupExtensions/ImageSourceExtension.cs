@@ -13,17 +13,17 @@ namespace AllOverIt.XamarinForms.MarkupExtensions
     /// <summary>
     /// The name of the image source to be retrieved.
     /// </summary>
-    public string? Source { get; set; }
+    public string Source { get; set; }
 
     /// <summary>
     /// A type from the assembly in which to look up the image resource.
     /// </summary>
-    public Type? ResolvingType { get; set; }
+    public Type ResolvingType { get; set; }
 
     /// <summary>
     /// Returns the object created from the markup extension.
     /// </summary>
-    public object? ProvideValue(IServiceProvider serviceProvider)
+    public object ProvideValue(IServiceProvider serviceProvider)
     {
       return string.IsNullOrEmpty(Source)
         ? null

@@ -1,13 +1,15 @@
-﻿using Xamarin.Forms;
+﻿using AllOverIt.XamarinForms.Logging;
+using Xamarin.Forms;
 
 namespace Behaviors
 {
   public partial class App : Application
   {
-
     public App()
     {
       InitializeComponent();
+
+      DependencyService.Register<ILogger, BehaviorLogger>();
 
       MainPage = new AppShell();
     }
