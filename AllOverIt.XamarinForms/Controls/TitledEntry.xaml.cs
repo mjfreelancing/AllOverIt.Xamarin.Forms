@@ -169,6 +169,16 @@ namespace AllOverIt.XamarinForms.Controls
       InitializeComponent();
     }
 
+    public void EntryFocus()
+    {
+      InputEntry.Focus();
+    }
+
+    public void EntryUnfocus()
+    {
+      InputEntry.Unfocus();
+    }
+
     protected override void OnParentSet()
     {
       base.OnParentSet();
