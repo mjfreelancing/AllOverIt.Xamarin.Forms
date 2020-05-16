@@ -1,16 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Application
-  x:Class="Behaviors.App"
-  xmlns="http://xamarin.com/schemas/2014/forms"
-  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-  xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  mc:Ignorable="d">
-  <Application.Resources>
-    <Style x:Key="SeparatorStyle" TargetType="BoxView">
-      <Setter Property="HeightRequest" Value="2" />
-      <Setter Property="Color" Value="DimGray" />
-      <Setter Property="Opacity" Value="0.5" />
-    </Style>
-  </Application.Resources>
+	x:Class="Behaviors.App"
+	xmlns="http://xamarin.com/schemas/2014/forms"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d">
+	<Application.Resources>
+		<Style x:Key="SeparatorStyle" TargetType="BoxView">
+			<Setter Property="HeightRequest" Value="2" />
+			<Setter Property="Color" Value="Red" />
+			<Setter Property="Opacity" Value="0.5" />
+		</Style>
+	</Application.Resources>
 </Application>

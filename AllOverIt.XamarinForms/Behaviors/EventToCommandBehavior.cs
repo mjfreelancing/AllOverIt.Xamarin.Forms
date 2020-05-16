@@ -1,5 +1,7 @@
 ﻿using AllOverIt.XamarinForms.Behaviors.Base;
+using AllOverIt.XamarinForms.Commands;
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Xamarin.Forms;
 
@@ -8,12 +10,20 @@ namespace AllOverIt.XamarinForms.Behaviors
   // Based on https://docs.microsoft.com/en-us/xamarin/xamarin-forms/app-fundamentals/behaviors/creating
   // Based on https://docs.microsoft.com/en-us/xamarin/xamarin-forms/app-fundamentals/behaviors/reusable/event-to-command-behavior
   //
-  // Except this version supports multiple event/command handlers and can be attached via a style
+  // This version supports multiple event/command handlers
 
+  /// <summary>
+  /// Executes commands when a registered event is triggered.
+  /// </summary>
+  /// <remarks>When executed, the current BindingContext is assigned to the command handler.</remarks>
   [ContentProperty("Commands")]
-  public class EventToCommandBehavior : CommandsBehaviorBase<VisualElement>
+  public class EventToCommandBehavior : BehaviorBase<VisualElement>
   {
     private Delegate _eventHandler;
+
+    public static readonly BindableProperty EventCommandsProperty = BindableProperty.Create(nameof(Commands), typeof(IList<EventCommandBase>), typeof(EventToCommandBehavior));
+
+    public IList<EventCommandBase> Commands => (IList<EventCommandBase>)GetValue(EventCommandsProperty);
 
     public static readonly BindableProperty EventNameProperty = BindableProperty.Create(nameof(EventName), typeof(string), typeof(EventToCommandBehavior), propertyChanged: OnEventNameChanged);
 
@@ -22,6 +32,8 @@ namespace AllOverIt.XamarinForms.Behaviors
       get => (string)GetValue(EventNameProperty);
       set => SetValue(EventNameProperty, value);
     }
+
+    public EventToCommandBehavior() => SetValue(EventCommandsProperty, new List<EventCommandBase>());
 
     protected override void OnAttachedTo(VisualElement bindable)
     {
@@ -66,10 +78,8 @@ namespace AllOverIt.XamarinForms.Behaviors
 
       var eventInfo = AssociatedObject.GetType().GetRuntimeEvent(name);
 
-      if (eventInfo == null)
-      {
-        throw new ArgumentException($"Cannot un-register the '{EventName}' event");
-      }
+      // this should never fail since the event must have been registered before it can be unregistered
+      _ = eventInfo ?? throw new InvalidOperationException($"Cannot un-register the '{EventName}' event");
 
       eventInfo.RemoveEventHandler(AssociatedObject, _eventHandler);
       _eventHandler = null;

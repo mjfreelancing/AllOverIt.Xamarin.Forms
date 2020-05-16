@@ -84,7 +84,7 @@ namespace AllOverIt.XamarinForms.Behaviors
 
     private void OnEntryTextChanged(object sender, TextChangedEventArgs args)
     {
-      // only validate during data entry - in case the non-focused text is formatted
+      // only validate during data entry - in case the non-focused text is modified/formatted by a converter
       if (!AssociatedObject.IsFocused || string.IsNullOrWhiteSpace(args.NewTextValue))
       {
         return;

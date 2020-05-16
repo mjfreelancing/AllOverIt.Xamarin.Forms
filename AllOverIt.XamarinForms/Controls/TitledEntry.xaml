@@ -1,20 +1,20 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
 <ContentView
-  x:Class="AllOverIt.XamarinForms.Controls.TitledEntry"
-  xmlns="http://xamarin.com/schemas/2014/forms"
-  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-  xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  mc:Ignorable="d">
-  <Grid>
-    <Grid.RowDefinitions>
-      <RowDefinition Height="Auto" />
-      <RowDefinition Height="Auto" />
-    </Grid.RowDefinitions>
-    <Label
-      x:Name="EntryTitle"
-      Grid.Row="0"
-      FontAttributes="Bold" />
-    <Entry x:Name="InputEntry" Grid.Row="1" />
-  </Grid>
+	x:Class="AllOverIt.XamarinForms.Controls.TitledEntry"
+	xmlns="http://xamarin.com/schemas/2014/forms"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+		<Label
+			x:Name="EntryTitle"
+			Grid.Row="0"
+			FontAttributes="Bold" />
+		<Entry x:Name="InputEntry" Grid.Row="1" />
+	</Grid>
 </ContentView>

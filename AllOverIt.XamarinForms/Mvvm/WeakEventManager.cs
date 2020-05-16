@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AllOverIt.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -21,11 +22,11 @@ namespace AllOverIt.XamarinForms.Mvvm
       public Subscription(WeakReference subscriber, MethodInfo handler)
       {
         Subscriber = subscriber;
-        Handler = handler ?? throw new ArgumentNullException(nameof(handler));
+        Handler = handler.WhenNotNull(nameof(handler));
       }
     }
 
-    private readonly IDictionary<string, List<Subscription>> _eventHandlers = new Dictionary<string, List<Subscription>>();
+    private readonly IDictionary<string, IList<Subscription>> _eventHandlers = new Dictionary<string, IList<Subscription>>();
 
     /// <summary>
     /// Add an event handler to the manager.
@@ -36,15 +37,8 @@ namespace AllOverIt.XamarinForms.Mvvm
     public void AddEventHandler<TEventArgs>(EventHandler<TEventArgs> handler, [CallerMemberName] string eventName = "")
       where TEventArgs : EventArgs
     {
-      if (handler == null)
-      {
-        throw new ArgumentNullException(nameof(handler));
-      }
-
-      if (string.IsNullOrEmpty(eventName))
-      {
-        throw new ArgumentNullException(nameof(eventName));
-      }
+      _ = handler.WhenNotNull(nameof(handler));
+      _ = eventName.WhenNotNullOrEmpty(nameof(eventName));
 
       AddEventHandler(eventName, handler.Target, handler.GetMethodInfo());
     }
@@ -56,15 +50,8 @@ namespace AllOverIt.XamarinForms.Mvvm
     /// <param name="eventName">Name to use in the dictionary. Should be unique.</param>
     public void AddEventHandler(EventHandler handler, [CallerMemberName] string eventName = "")
     {
-      if (handler == null)
-      {
-        throw new ArgumentNullException(nameof(handler));
-      }
-
-      if (string.IsNullOrEmpty(eventName))
-      {
-        throw new ArgumentNullException(nameof(eventName));
-      }
+      _ = handler.WhenNotNull(nameof(handler));
+      _ = eventName.WhenNotNullOrEmpty(nameof(eventName));
 
       AddEventHandler(eventName, handler.Target, handler.GetMethodInfo());
     }
@@ -77,7 +64,9 @@ namespace AllOverIt.XamarinForms.Mvvm
     /// <param name="eventName">Name of the event.</param>
     public void HandleEvent(object sender, object args, string eventName)
     {
-      if (!_eventHandlers.TryGetValue(eventName, out var target))
+      _ = eventName.WhenNotNullOrEmpty(nameof(eventName));
+
+      if (!_eventHandlers.TryGetValue(eventName, out var subscriptions))
       {
         return;
       }
@@ -85,7 +74,7 @@ namespace AllOverIt.XamarinForms.Mvvm
       var toRaise = new List<(object subscriber, MethodInfo handler)>();
       var toRemove = new List<Subscription>();
 
-      foreach (var subscription in target)
+      foreach (var subscription in subscriptions)
       {
         if (subscription.Subscriber == null)
         {
@@ -110,7 +99,7 @@ namespace AllOverIt.XamarinForms.Mvvm
 
       foreach (var subscription in toRemove)
       {
-        target.Remove(subscription);
+        subscriptions.Remove(subscription);
       }
 
       foreach (var (subscriber, handler) in toRaise)
@@ -128,15 +117,8 @@ namespace AllOverIt.XamarinForms.Mvvm
     public void RemoveEventHandler<TEventArgs>(EventHandler<TEventArgs> handler, [CallerMemberName] string eventName = "")
       where TEventArgs : EventArgs
     {
-      if (string.IsNullOrEmpty(eventName))
-      {
-        throw new ArgumentNullException(nameof(eventName));
-      }
-
-      if (handler == null)
-      {
-        throw new ArgumentNullException(nameof(handler));
-      }
+      _ = handler.WhenNotNull(nameof(handler));
+      _ = eventName.WhenNotNullOrEmpty(nameof(eventName));
 
       RemoveEventHandler(eventName, handler.Target, handler.GetMethodInfo());
     }
@@ -148,15 +130,8 @@ namespace AllOverIt.XamarinForms.Mvvm
     /// <param name="eventName">Event name to remove</param>
     public void RemoveEventHandler(EventHandler handler, [CallerMemberName] string eventName = "")
     {
-      if (string.IsNullOrEmpty(eventName))
-      {
-        throw new ArgumentNullException(nameof(eventName));
-      }
-
-      if (handler == null)
-      {
-        throw new ArgumentNullException(nameof(handler));
-      }
+      _ = handler.WhenNotNull(nameof(handler));
+      _ = eventName.WhenNotNullOrEmpty(nameof(eventName));
 
       RemoveEventHandler(eventName, handler.Target, handler.GetMethodInfo());
     }
@@ -187,8 +162,9 @@ namespace AllOverIt.XamarinForms.Mvvm
       for (var index = subscriptions.Count; index > 0; index--)
       {
         var current = subscriptions[index - 1];
+        var currentTarget = current.Subscriber?.Target;
 
-        if (current.Subscriber?.Target != handlerTarget || current.Handler.Name != methodInfo.Name)
+        if (currentTarget != handlerTarget || current.Handler.Name != methodInfo.Name)
         {
           continue;
         }

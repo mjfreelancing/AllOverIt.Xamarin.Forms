@@ -4,6 +4,7 @@
 	xmlns="http://xamarin.com/schemas/2014/forms"
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 	xmlns:behaviors="clr-namespace:AllOverIt.XamarinForms.Behaviors;assembly=AllOverIt.XamarinForms"
+	xmlns:commands="clr-namespace:AllOverIt.XamarinForms.Commands;assembly=AllOverIt.XamarinForms"
 	xmlns:controls="clr-namespace:AllOverIt.XamarinForms.Controls;assembly=AllOverIt.XamarinForms"
 	xmlns:converters="clr-namespace:AllOverIt.XamarinForms.Converters;assembly=AllOverIt.XamarinForms"
 	xmlns:d="http://xamarin.com/schemas/2014/forms/design"
@@ -37,7 +38,7 @@
 		</ResourceDictionary>
 	</ContentPage.Resources>
 
-	<StackLayout Margin="16">
+	<StackLayout Margin="16" VerticalOptions="Center">
 		<BoxView />
 		<controls:ActivitySpinner
 			x:Name="Spinner"
@@ -47,6 +48,7 @@
 			TextColor="Purple"
 			TextFontAttributes="Bold,Italic"
 			TextFontSize="18" />
+		<!--  this BoxView becomes visible when the ActivitySpinner is made visible  -->
 		<BoxView>
 			<BoxView.Triggers>
 				<DataTrigger
@@ -57,8 +59,9 @@
 				</DataTrigger>
 			</BoxView.Triggers>
 		</BoxView>
-		<Entry Placeholder="Test Me" />
+		<Entry Margin="0,20" Placeholder="Test Me" />
 		<controls:TitledEntry
+			Margin="0,20"
 			BackgroundColor="Beige"
 			EntryFontAttributes="Italic"
 			EntryFontSize="20"
@@ -71,21 +74,25 @@
 			TitleTextColor="Blue">
 			<controls:TitledEntry.Behaviors>
 				<behaviors:EventToCommandBehavior EventName="EntryFocused">
-					<behaviors:InvokeEventCommand Command="{Binding EntryFocusedCommand}" />
+					<commands:InvokeEventCommand Command="{Binding EntryFocusedCommand}" />
 				</behaviors:EventToCommandBehavior>
 				<behaviors:EventToCommandBehavior EventName="EntryTextChanged">
-					<behaviors:InvokeEventCommand Command="{Binding EntryTextChangedCommand}" />
+					<commands:InvokeEventCommand Command="{Binding EntryTextChangedCommand}" />
 				</behaviors:EventToCommandBehavior>
 				<behaviors:EventToCommandBehavior EventName="EntryUnfocused">
-					<behaviors:InvokeEventCommand Command="{Binding EntryUnfocusedCommand}" />
+					<commands:InvokeEventCommand Command="{Binding EntryUnfocusedCommand}" />
 				</behaviors:EventToCommandBehavior>
 			</controls:TitledEntry.Behaviors>
 		</controls:TitledEntry>
-		<BoxView />
-		<Label Style="{StaticResource EnumPickerTitle}" Text="Select a Title:" />
+		<Label
+			Margin="0,20"
+			Style="{StaticResource EnumPickerTitle}"
+			Text="Select a Title:" />
 		<controls:EnumPicker Title="Title" EnumType="{x:Type models:PersonTitle}" />
-		<BoxView />
-		<Label Style="{StaticResource EnumPickerTitle}" Text="Select a Period:" />
+		<Label
+			Margin="0,20"
+			Style="{StaticResource EnumPickerTitle}"
+			Text="Select a Period:" />
 		<controls:EnumPicker
 			Title="Period"
 			DisplayItemConverter="{StaticResource SplitWordsConverter}"

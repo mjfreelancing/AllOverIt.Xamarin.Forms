@@ -1,13 +1,12 @@
 ﻿using AllOverIt.XamarinForms.Exceptions;
 using AllOverIt.XamarinForms.Tasks;
-using AllOverIt.XamarinForms.Tests;
 using FakeItEasy;
 using FluentAssertions;
 using System;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace AllOverIt.Tests.Helpers
+namespace AllOverIt.XamarinForms.Tests.Tasks
 {
   // SetDefaultExceptionHandler() updates a static - tests need to run sequentially
   [CollectionDefinition(nameof(DefaultExceptionHandlerCollection), DisableParallelization = true)]
@@ -44,6 +43,33 @@ namespace AllOverIt.Tests.Helpers
     [Collection(nameof(DefaultExceptionHandlerCollection))]
     public class SafeFireAndForget : TaskHelperFixture
     {
+      [Fact(Timeout = 5000)]
+      public async Task Should_Run_To_Completion()
+      {
+        var expected = Create<bool>();
+        var tcs = new TaskCompletionSource<bool>();
+        Exception handledException = null;
+
+        var task = Task.Run(async () =>
+        {
+          await Task.Delay(10).ConfigureAwait(false);
+
+          return tcs.TrySetResult(expected);
+        });
+
+        TaskHelper.SafeFireAndForget(task, ex =>
+        {
+          handledException = ex;
+        });
+
+        await tcs.Task.ConfigureAwait(false);
+
+        var actual = await task;
+
+        actual.Should().Be(expected);
+        handledException.Should().BeNull();
+      }
+
       [Fact(Timeout = 5000)]
       public async Task Should_Execute_Default_Handler()
       {

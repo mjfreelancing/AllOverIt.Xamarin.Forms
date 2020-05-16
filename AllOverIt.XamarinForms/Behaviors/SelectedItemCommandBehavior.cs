@@ -1,4 +1,5 @@
 ﻿using AllOverIt.XamarinForms.Behaviors.Base;
+using System;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -47,6 +48,8 @@ namespace AllOverIt.XamarinForms.Behaviors
 
     private void OnItemSelected(object sender, SelectedItemChangedEventArgs eventArgs)
     {
+      _ = Command ?? throw new InvalidOperationException("No Command has been provided");
+
       var resolvedArgs = Converter != null
         ? Converter.Convert(eventArgs, typeof(object), ConverterParameter, null)
         : eventArgs;

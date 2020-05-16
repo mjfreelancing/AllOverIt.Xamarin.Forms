@@ -30,29 +30,32 @@ namespace AllOverIt.XamarinForms.Controls
         return;
       }
 
-      if (newValue == null)
+      switch (newValue)
       {
-        picker.ItemsSource = null;
-      }
-      else
-      {
-        var newType = (Type) newValue;
+        case null:
+          picker.ItemsSource = null;
+          break;
 
-        if(!newType.IsEnum)
+        case Type enumType when !enumType.IsEnum:
+          throw new ArgumentException("The EnumType property must be an Enum type");
+
+        case Type enumType:
         {
-          throw new ArgumentException("The EnumType property must be an enumeration type");
+          var items = Enum.GetNames(enumType).ToList();
+
+          if (picker.DisplayItemConverter != null)
+          {
+            items = items
+              .Select(item => (string)picker.DisplayItemConverter.Convert(item, typeof(string), null, CultureInfo.InvariantCulture))
+              .ToList();
+          }
+
+          picker.ItemsSource = items;
+          break;
         }
 
-        var items = Enum.GetNames(newType).ToList();
-
-        if (picker.DisplayItemConverter != null)
-        {
-          items = items
-            .Select(item => (string)picker.DisplayItemConverter.Convert(item, typeof(string), null, CultureInfo.InvariantCulture))
-            .ToList();
-        }
-
-        picker.ItemsSource = items;
+        default:
+          throw new ArgumentOutOfRangeException(nameof(newValue), $"Expected an Enum Type for the {nameof(EnumType)} property");
       }
     }
   }

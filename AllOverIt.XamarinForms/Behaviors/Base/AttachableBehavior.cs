@@ -1,8 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Xamarin.Forms;
 
 namespace AllOverIt.XamarinForms.Behaviors.Base
 {
+  // only inherit from AttachableBehavior if the behavior can function as-is without specific configuration of its properties
   public class AttachableBehavior<TBehavior, TBindable> : BehaviorBase<TBindable>
     where TBehavior : Behavior, new()
     where TBindable : VisualElement
@@ -18,21 +20,15 @@ namespace AllOverIt.XamarinForms.Behaviors.Base
 
     public static readonly BindableProperty AttachBehaviorProperty = BindableProperty.CreateAttached("AttachBehavior", typeof(bool), typeof(TBehavior), false, propertyChanged: OnAttachBehaviorChanged);
 
-    public static bool GetAttachBehavior(BindableObject bindable)
-    {
-      return (bool)bindable.GetValue(AttachBehaviorProperty);
-    }
+    public static bool GetAttachBehavior(BindableObject bindable) => (bool)bindable.GetValue(AttachBehaviorProperty);
 
-    public static void SetAttachBehavior(BindableObject bindable, bool value)
-    {
-      bindable.SetValue(AttachBehaviorProperty, value);
-    }
+    public static void SetAttachBehavior(BindableObject bindable, bool value) => bindable.SetValue(AttachBehaviorProperty, value);
 
     private static void OnAttachBehaviorChanged(BindableObject bindable, object oldValue, object newValue)
     {
       if (!(bindable is TBindable visualElement))
       {
-        return;
+        throw new ArgumentException($"Cannot attach behavior to target type {bindable.GetType()}, expected {typeof(TBindable)}");
       }
 
       var attachBehavior = (bool)newValue;

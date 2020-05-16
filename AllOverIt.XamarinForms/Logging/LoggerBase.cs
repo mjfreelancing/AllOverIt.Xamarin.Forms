@@ -4,9 +4,16 @@ using System.Threading.Tasks;
 
 namespace AllOverIt.XamarinForms.Logging
 {
+  public enum LogLevel
+  {
+    Debug,
+    Info,
+    Warn,
+    Error
+  }
   public abstract class LoggerBase : ILogger
   {
-    private readonly BlockingCollection<(string Level, string Message)> _logMessages;
+    private readonly BlockingCollection<(LogLevel Level, string Message)> _logMessages;
 
     protected string Tag { get; }
 
@@ -14,7 +21,7 @@ namespace AllOverIt.XamarinForms.Logging
     {
       Tag = tag;
 
-      _logMessages = new BlockingCollection<(string, string)>();
+      _logMessages = new BlockingCollection<(LogLevel, string)>();
 
       // don't bother disposing of tasks : https://devblogs.microsoft.com/pfxteam/do-i-need-to-dispose-of-tasks/
       Task.Factory.StartNew(() =>
@@ -26,17 +33,17 @@ namespace AllOverIt.XamarinForms.Logging
       }, CancellationToken.None, TaskCreationOptions.LongRunning, TaskScheduler.Default);
     }
 
-    public void Debug(string message) => DoLog("D", message);
-    public void Info(string message) => DoLog("I", message);
-    public void Warn(string message) => DoLog("W", message);
-    public void Error(string message) => DoLog("E", message);
+    public void Debug(string message) => DoLog(LogLevel.Debug, message);
+    public void Info(string message) => DoLog(LogLevel.Info, message);
+    public void Warn(string message) => DoLog(LogLevel.Warn, message);
+    public void Error(string message) => DoLog(LogLevel.Error, message);
 
     public void Dispose()
     {
       Dispose(true);
     }
 
-    protected abstract void LogMessage(string level, string message);
+    protected abstract void LogMessage(LogLevel level, string message);
 
     protected virtual void Dispose(bool disposing)
     {
@@ -46,7 +53,7 @@ namespace AllOverIt.XamarinForms.Logging
       }
     }
 
-    private void DoLog(string level, string message)
+    private void DoLog(LogLevel level, string message)
     {
       var logMessage = (level, message);
 

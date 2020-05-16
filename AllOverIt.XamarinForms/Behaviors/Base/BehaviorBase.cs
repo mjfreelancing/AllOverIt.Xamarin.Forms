@@ -35,9 +35,6 @@ namespace AllOverIt.XamarinForms.Behaviors.Base
       BindingContext = AssociatedObject.BindingContext;
     }
 
-    private void OnBindingContextChanged(object sender, EventArgs args)
-    {
-      OnBindingContextChanged();
-    }
+    private void OnBindingContextChanged(object sender, EventArgs args) => OnBindingContextChanged();
   }
 }

@@ -26,28 +26,34 @@ namespace AllOverIt.XamarinForms.Commands
     }
 
     public AsyncCommand(Func<Task> execute)
-      : this(execute, () => true, true, (Action<Exception>)null)
+      : this(execute, () => true, true)
     {
     }
 
     public AsyncCommand(Func<Task> execute, bool continueOnCapturedContext)
-      : this(execute, () => true, continueOnCapturedContext, (Action<Exception>)null)
+      : this(execute, () => true, continueOnCapturedContext)
     {
     }
 
-    public AsyncCommand(Func<Task> execute, Func<bool> canExecute, bool continueOnCapturedContext, 
-      IExceptionHandler exceptionHandler)
-      : this(execute, canExecute, continueOnCapturedContext, ExceptionHandlerHelper.CreateExceptionActionHandler(exceptionHandler))
+    public AsyncCommand(Func<Task> execute, Func<bool> canExecute, bool continueOnCapturedContext, IExceptionHandler exceptionHandler)
+      : this(execute, canExecute, continueOnCapturedContext)
     {
+      _ = exceptionHandler ?? throw new ArgumentNullException(nameof(exceptionHandler));
+
+      _exceptionHandler = exceptionHandler.Handle;
     }
 
-    public AsyncCommand(Func<Task> execute, Func<bool> canExecute, bool continueOnCapturedContext, 
-      Action<Exception> exceptionHandler)
+    public AsyncCommand(Func<Task> execute, Func<bool> canExecute, bool continueOnCapturedContext, Action<Exception> exceptionHandler)
+      : this(execute, canExecute, continueOnCapturedContext)
+    {
+      _exceptionHandler = exceptionHandler ?? throw new ArgumentNullException(nameof(exceptionHandler));
+    }
+
+    private AsyncCommand(Func<Task> execute, Func<bool> canExecute, bool continueOnCapturedContext)
     {
       _execute = execute ?? throw new ArgumentNullException(nameof(execute));
       _canExecute = canExecute ?? throw new ArgumentNullException(nameof(canExecute));
       _continueOnCapturedContext = continueOnCapturedContext;
-      _exceptionHandler = exceptionHandler;
     }
 
     // Prevents re-entry. Not locking since commands are typically called from the main thread.
@@ -61,6 +67,10 @@ namespace AllOverIt.XamarinForms.Commands
         {
           _isExecuting = true;
           await _execute.Invoke().ConfigureAwait(_continueOnCapturedContext);
+        }
+        catch (Exception ex) when (_exceptionHandler != null)
+        {
+          _exceptionHandler.Invoke(ex);
         }
         finally
         {
@@ -96,28 +106,34 @@ namespace AllOverIt.XamarinForms.Commands
     }
 
     public AsyncCommand(Func<TType, Task> execute)
-      : this(execute, _ => true, true, (Action<Exception>)null)
+      : this(execute, _ => true, true)
     {
     }
 
     public AsyncCommand(Func<TType, Task> execute, bool continueOnCapturedContext)
-      : this(execute, _ => true, continueOnCapturedContext, (Action<Exception>)null)
+      : this(execute, _ => true, continueOnCapturedContext)
     {
     }
 
-    public AsyncCommand(Func<TType, Task> execute, Func<TType, bool> canExecute, bool continueOnCapturedContext,
-      IExceptionHandler exceptionHandler)
-      : this(execute, canExecute, continueOnCapturedContext, ExceptionHandlerHelper.CreateExceptionActionHandler(exceptionHandler))
+    public AsyncCommand(Func<TType, Task> execute, Func<TType, bool> canExecute, bool continueOnCapturedContext, IExceptionHandler exceptionHandler)
+      : this(execute, canExecute, continueOnCapturedContext)
     {
+      _ = exceptionHandler ?? throw new ArgumentNullException(nameof(exceptionHandler));
+
+      _exceptionHandler = exceptionHandler.Handle;
     }
 
-    public AsyncCommand(Func<TType, Task> execute, Func<TType, bool> canExecute, bool continueOnCapturedContext,
-      Action<Exception> exceptionHandler)
+    public AsyncCommand(Func<TType, Task> execute, Func<TType, bool> canExecute, bool continueOnCapturedContext, Action<Exception> exceptionHandler)
+      : this(execute, canExecute, continueOnCapturedContext)
+    {
+      _exceptionHandler = exceptionHandler ?? throw new ArgumentNullException(nameof(exceptionHandler));
+    }
+
+    private AsyncCommand(Func<TType, Task> execute, Func<TType, bool> canExecute, bool continueOnCapturedContext)
     {
       _execute = execute ?? throw new ArgumentNullException(nameof(execute));
       _canExecute = canExecute ?? throw new ArgumentNullException(nameof(canExecute));
       _continueOnCapturedContext = continueOnCapturedContext;
-      _exceptionHandler = exceptionHandler;
     }
 
     // Prevents re-entry. Not locking since commands are typically called from the main thread.
@@ -131,6 +147,10 @@ namespace AllOverIt.XamarinForms.Commands
         {
           _isExecuting = true;
           await _execute(parameter).ConfigureAwait(_continueOnCapturedContext);
+        }
+        catch (Exception ex) when (_exceptionHandler != null)
+        {
+          _exceptionHandler.Invoke(ex);
         }
         finally
         {
@@ -146,17 +166,6 @@ namespace AllOverIt.XamarinForms.Commands
 
     void ICommand.Execute(object parameter) => ExecuteAsync((TType)parameter).SafeFireAndForget(_exceptionHandler, _continueOnCapturedContext);
 
-    // raised to indicate there may be a change that has enabled / disabled the command
     private void RaiseCanExecuteChanged() => _weakEventManager.HandleEvent(this, EventArgs.Empty, nameof(CanExecuteChanged));
-  }
-
-  internal static class ExceptionHandlerHelper
-  {
-    internal static Action<Exception> CreateExceptionActionHandler(IExceptionHandler exceptionHandler)
-    {
-      _ = exceptionHandler ?? throw new ArgumentNullException(nameof(exceptionHandler));
-
-      return exceptionHandler.Handle;
-    }
   }
 }

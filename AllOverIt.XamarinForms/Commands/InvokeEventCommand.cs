@@ -1,10 +1,9 @@
-﻿using AllOverIt.XamarinForms.Behaviors.Base;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using Xamarin.Forms;
 
-namespace AllOverIt.XamarinForms.Behaviors
+namespace AllOverIt.XamarinForms.Commands
 {
-  public sealed class InvokeEventCommand : EventCommand
+  public sealed class InvokeEventCommand : EventCommandBase
   {
     public static readonly BindableProperty CommandProperty = BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(InvokeEventCommand));
 
@@ -23,8 +22,7 @@ namespace AllOverIt.XamarinForms.Behaviors
       set => SetValue(CommandParameterProperty, value);
     }
 
-
-    // refers to a converter for the event args
+    // refers to a converter for the Execute() parameter (such as event args via EventToCommandBehavior)
     public static readonly BindableProperty ConverterProperty = BindableProperty.Create(nameof(Converter), typeof(IValueConverter), typeof(InvokeEventCommand));
 
     public IValueConverter Converter
@@ -55,17 +53,14 @@ namespace AllOverIt.XamarinForms.Behaviors
         resolvedParameter = Converter != null 
           ? Converter.Convert(parameter, typeof(object), ConverterParameter, null) 
           : parameter;
-
-        if (!Command.CanExecute(resolvedParameter))
-        {
-          return false;
-        }
       }
 
-      if (Command.CanExecute(resolvedParameter))
+      if (!Command.CanExecute(resolvedParameter))
       {
-        Command.Execute(resolvedParameter);
+        return false;
       }
+
+      Command.Execute(resolvedParameter);
 
       return true;
     }

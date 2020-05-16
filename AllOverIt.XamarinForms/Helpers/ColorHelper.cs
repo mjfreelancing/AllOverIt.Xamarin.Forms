@@ -42,7 +42,7 @@ namespace AllOverIt.XamarinForms.Helpers
     {
       // https://www.w3.org/TR/WCAG20/#relativeluminancedef
 
-      double GetComponent(double value)
+      static double GetComponent(double value)
       {
         return value <= 0.03928
           ? value / 12.92

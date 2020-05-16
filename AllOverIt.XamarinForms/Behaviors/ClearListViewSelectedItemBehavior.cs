@@ -3,6 +3,10 @@ using Xamarin.Forms;
 
 namespace AllOverIt.XamarinForms.Behaviors
 {
+  /// <summary>
+  /// Clears the selected item of a <see cref="ListView"/> after an item has been selected
+  /// </summary>
+  /// <remarks>This behavior can be attached via a style.</remarks>
   public class ClearListViewSelectedItemBehavior : AttachableBehavior<ClearListViewSelectedItemBehavior, ListView>
   {
     protected override void OnAttachedTo(ListView bindable)

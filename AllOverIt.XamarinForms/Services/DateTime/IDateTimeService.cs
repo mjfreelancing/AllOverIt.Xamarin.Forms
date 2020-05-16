@@ -3,5 +3,6 @@
   public interface IDateTimeService
   {
     System.DateTime CurrentDate { get; }
+    System.DateTime CurrentDateTime { get; }
   }
 }

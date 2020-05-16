@@ -8,10 +8,9 @@ namespace AllOverIt.XamarinForms.Mvvm
 {
   public abstract class ViewModelBase : ObservableObject
   {
-    private bool _deferredNotification;
-    private IList<string> _propertiesNotified;
     private bool _isBusy;
     private string _title;
+    private IList<string> _deferredNotifications;
     private readonly Lazy<ILogger> _logger;
 
     protected ILogger Logger => _logger?.Value;
@@ -37,47 +36,46 @@ namespace AllOverIt.XamarinForms.Mvvm
       _logger = logger;
     }
 
-    protected override void RaisePropertyChanged([CallerMemberName] string propertyName = "")
+    public override void RaisePropertyChanged([CallerMemberName] string propertyName = "")
     {
-      // not checking for PropertyChanged == null since this code allows for the event handler to be assigned just before
-      // a deferred notification is performed (when the disposable from CreatePropertyChangeTrackingScope() is disposed of)
+      // not checking for _propertiesNotified == null since this code allows for the event handler to be assigned just before
+      // a deferred notification is performed (when the IDisposable from CreateDeferredPropertyChangeScope() is disposed of)
 
-      if (_propertiesNotified != null)
+      if (_deferredNotifications != null)
       {
-        if (_propertiesNotified.Contains(propertyName))
+        if (_deferredNotifications.Contains(propertyName))
         {
           return;
         }
 
-        _propertiesNotified.Add(propertyName);
+        _deferredNotifications.Add(propertyName);
       }
-
-      if (!_deferredNotification)
+      else
       {
         base.RaisePropertyChanged(propertyName);
       }
     }
 
-    protected IDisposable CreatePropertyChangeTrackingScope(bool deferredNotification)
+    public IDisposable CreateDeferredPropertyChangeScope()
     {
       void InitialiseNotification()
       {
-        _deferredNotification = deferredNotification;
-        _propertiesNotified = new List<string>();
+        if (_deferredNotifications != null)
+        {
+          throw new InvalidOperationException("Deferred property notification cannot be nested");
+        }
+
+        _deferredNotifications = new List<string>();
       }
 
       void CleanupNotification()
       {
-        if (_deferredNotification)
+        foreach (var propertyName in _deferredNotifications)
         {
-          foreach (var propertyName in _propertiesNotified)
-          {
-            base.RaisePropertyChanged(propertyName);
-          }
+          base.RaisePropertyChanged(propertyName);
         }
 
-        _deferredNotification = false;
-        _propertiesNotified = null;
+        _deferredNotifications = null;
       }
 
       return new Raii(InitialiseNotification, CleanupNotification);

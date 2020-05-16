@@ -22,35 +22,23 @@ namespace AllOverIt.XamarinForms.Converters
 
     private static Color GetColor(object value)
     {
-      switch (value)
+      return value switch
       {
-        case Color asColor:
-          return asColor;
-
-        case string asString:
-          return Color.FromHex(asString);
-
-        default:
-          throw new NotSupportedException();
-      }
+        Color asColor => asColor,
+        string asString => Color.FromHex(asString),
+        _ => throw new NotSupportedException()
+      };
     }
 
     private static double GetOpacity(object parameter)
     {
-      switch (parameter)
+      return parameter switch
       {
-        case null:
-          return 1.0d;
-
-        case double asDouble:
-          return asDouble;
-
-        case string asString:
-          return double.Parse(asString);
-
-        default:
-          throw new NotSupportedException();
-      }
+        null => 1.0d,
+        double asDouble => asDouble,
+        string asString => double.Parse(asString),
+        _ => throw new NotSupportedException()
+      };
     }
   }
 }

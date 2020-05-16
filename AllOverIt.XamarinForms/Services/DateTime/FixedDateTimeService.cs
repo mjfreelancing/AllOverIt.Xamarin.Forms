@@ -3,11 +3,12 @@
   // for use in unit tests
   public class FixedDateTimeService : IDateTimeService
   {
-    public System.DateTime CurrentDate { get; }
+    public System.DateTime CurrentDate => CurrentDateTime.Date;
+    public System.DateTime CurrentDateTime { get; }
 
-    public FixedDateTimeService(System.DateTime fixedDate)
+    public FixedDateTimeService(System.DateTime fixedDateTime)
     {
-      CurrentDate = fixedDate;
+      CurrentDateTime = fixedDateTime;
     }
   }
 }

@@ -207,20 +207,9 @@ namespace AllOverIt.XamarinForms.Controls
 
     private void SetEntryEventHandlers()
     {
-      InputEntry.TextChanged += (sender, args) =>
-      {
-        OnEntryTextChanged(args);
-      };
-
-      InputEntry.Focused += (sender, args) =>
-      {
-        OnEntryFocused(args);
-      };
-
-      InputEntry.Unfocused += (sender, args) =>
-      {
-        OnEntryUnfocused(args);
-      };
+      InputEntry.TextChanged += (sender, args) => OnEntryTextChanged(args);
+      InputEntry.Focused += (sender, args) => OnEntryFocused(args);
+      InputEntry.Unfocused += (sender, args) => OnEntryUnfocused(args);
     }
 
     private void OnEntryFocused(FocusEventArgs args)
