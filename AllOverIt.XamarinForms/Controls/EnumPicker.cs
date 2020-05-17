@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AllOverIt.Helpers;
+using System;
 using System.Globalization;
 using System.Linq;
 using Xamarin.Forms;
@@ -7,7 +8,8 @@ namespace AllOverIt.XamarinForms.Controls
 {
   public class EnumPicker : Picker
   {
-    public static readonly BindableProperty EnumTypeProperty = BindableProperty.Create(nameof(EnumType), typeof(Type), typeof(EnumPicker), propertyChanged: OnEnumTypeChanged);
+    public static readonly BindableProperty EnumTypeProperty = BindableProperty.Create(nameof(EnumType), typeof(Type), typeof(EnumPicker),
+      propertyChanged: EnumTypeChanged);
 
     public Type EnumType
     {
@@ -15,7 +17,8 @@ namespace AllOverIt.XamarinForms.Controls
       set => SetValue(EnumTypeProperty, value);
     }
 
-    public static readonly BindableProperty DisplayItemConverterProperty = BindableProperty.Create(nameof(DisplayItemConverter), typeof(IValueConverter), typeof(EnumPicker));
+    public static readonly BindableProperty DisplayItemConverterProperty = BindableProperty.Create(nameof(DisplayItemConverter), typeof(IValueConverter), typeof(EnumPicker),
+      propertyChanged: DisplayItemConverterChanged);
 
     public IValueConverter DisplayItemConverter
     {
@@ -23,12 +26,9 @@ namespace AllOverIt.XamarinForms.Controls
       set => SetValue(DisplayItemConverterProperty, value);
     }
 
-    private static void OnEnumTypeChanged(BindableObject bindable, object oldValue, object newValue)
+    private static void EnumTypeChanged(BindableObject bindable, object oldValue, object newValue)
     {
-      if (!(bindable is EnumPicker picker))
-      {
-        return;
-      }
+      var picker = (bindable as EnumPicker).WhenNotNull(nameof(bindable));
 
       switch (newValue)
       {
@@ -36,27 +36,43 @@ namespace AllOverIt.XamarinForms.Controls
           picker.ItemsSource = null;
           break;
 
-        case Type enumType when !enumType.IsEnum:
-          throw new ArgumentException("The EnumType property must be an Enum type");
-
-        case Type enumType:
+        case Type enumType when enumType.IsEnum:
         {
-          var items = Enum.GetNames(enumType).ToList();
-
-          if (picker.DisplayItemConverter != null)
-          {
-            items = items
-              .Select(item => (string)picker.DisplayItemConverter.Convert(item, typeof(string), null, CultureInfo.InvariantCulture))
-              .ToList();
-          }
-
-          picker.ItemsSource = items;
+          SetItemsSource(picker, enumType);
           break;
         }
 
         default:
-          throw new ArgumentOutOfRangeException(nameof(newValue), $"Expected an Enum Type for the {nameof(EnumType)} property");
+          throw new ArgumentOutOfRangeException($"{nameof(EnumType)}", $"The {nameof(EnumType)} property must be an Enum type");
       }
+    }
+
+    private static void DisplayItemConverterChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+      var picker = (bindable as EnumPicker).WhenNotNull(nameof(bindable));
+
+      if (picker.EnumType == null)
+      {
+        picker.ItemsSource = null;
+      }
+      else
+      {
+        SetItemsSource(picker, picker.EnumType);
+      }
+    }
+
+    private static void SetItemsSource(EnumPicker picker, Type enumType)
+    {
+      var items = Enum.GetNames(enumType).ToList();
+
+      if (picker.DisplayItemConverter != null)
+      {
+        items = items
+          .Select(item => (string)picker.DisplayItemConverter.Convert(item, typeof(string), null, CultureInfo.InvariantCulture))
+          .ToList();
+      }
+
+      picker.ItemsSource = items;
     }
   }
 }

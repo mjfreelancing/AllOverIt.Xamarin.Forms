@@ -7,8 +7,8 @@ namespace AllOverIt.XamarinForms.Helpers
   {
     public static Color GetHighestContrastColor(Color backgroundColor, Color color1, Color color2)
     {
-      var color1Contrast = ColorHelper.GetContrastRatio(color1, backgroundColor);
-      var color2Contrast = ColorHelper.GetContrastRatio(color2, backgroundColor);
+      var color1Contrast = GetContrastRatio(color1, backgroundColor);
+      var color2Contrast = GetContrastRatio(color2, backgroundColor);
 
      return color1Contrast > color2Contrast
         ? color1

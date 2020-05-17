@@ -66,11 +66,11 @@
 			EntryFontAttributes="Italic"
 			EntryFontSize="20"
 			EntryIsEnabled="True"
-			EntryIsTextPredictionEnabled="True"
+			EntryIsPassword="True"
 			EntryPlaceholder="Enter 'AllOverIt' to appear busy"
 			TitleFontAttributes="Bold"
 			TitleFontSize="24"
-			TitleText="Titled Entry"
+			TitleText="Titled Entry (password mode)"
 			TitleTextColor="Blue">
 			<controls:TitledEntry.Behaviors>
 				<behaviors:EventToCommandBehavior EventName="EntryFocused">

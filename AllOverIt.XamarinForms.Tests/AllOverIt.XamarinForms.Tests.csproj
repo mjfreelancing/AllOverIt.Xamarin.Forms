@@ -27,8 +27,4 @@
     <ProjectReference Include="..\AllOverIt.XamarinForms\AllOverIt.XamarinForms.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controls\" />
-  </ItemGroup>
-
 </Project>

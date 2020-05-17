@@ -1,4 +1,4 @@
-﻿using System;
+﻿using AllOverIt.Helpers;
 using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -14,7 +14,7 @@ namespace AllOverIt.XamarinForms.Controls
     private static readonly SemaphoreSlim AnimationSemaphore = new SemaphoreSlim(1);
     private const uint DefaultFadeDuration = 400;
 
-    public static readonly BindableProperty IsLoadingProperty = BindableProperty.Create(nameof(IsLoading), typeof(bool), typeof(ActivitySpinner), default(bool), propertyChanged: OnIsLoadingPropertyChanged);
+    public static readonly BindableProperty IsLoadingProperty = BindableProperty.Create(nameof(IsLoading), typeof(bool), typeof(ActivitySpinner), default(bool), propertyChanged: IsLoadingPropertyChanged);
 
     public bool IsLoading
     {
@@ -30,7 +30,7 @@ namespace AllOverIt.XamarinForms.Controls
       set => SetValue(IndicatorColorProperty, value);
     }
     
-    public static readonly BindableProperty TextProperty = BindableProperty.Create(nameof(Text), typeof(string), typeof(ActivitySpinner), default(string), propertyChanged: OnTextPropertyChanged);
+    public static readonly BindableProperty TextProperty = BindableProperty.Create(nameof(Text), typeof(string), typeof(ActivitySpinner), default(string), propertyChanged: TextPropertyChanged);
 
     public string Text
     {
@@ -97,55 +97,31 @@ namespace AllOverIt.XamarinForms.Controls
     {
       // bind properties from this control to the Label
       SpinnerText.BindingContext = this;
+      SpinnerText.SetBinding(Label.TextProperty, nameof(Text));
       SpinnerText.SetBinding(Label.TextColorProperty, nameof(TextColor));
       SpinnerText.SetBinding(Label.FontSizeProperty, nameof(TextFontSize));
       SpinnerText.SetBinding(Label.FontFamilyProperty, nameof(TextFontFamily));
       SpinnerText.SetBinding(Label.FontAttributesProperty, nameof(TextFontAttributes));
     }
 
-    private static async void OnIsLoadingPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+    private static async void IsLoadingPropertyChanged(BindableObject bindable, object oldValue, object newValue)
     {
-      await SetIndicatorPropertyAsync<bool>(bindable, newValue,
-        async (activitySpinner, propertyValue) =>
-        {
-          await ToggleVisibility(activitySpinner);
-        });
+      var spinner = (bindable as ActivitySpinner).WhenNotNull(nameof(bindable));
+
+      await SetLoadingVisibility(spinner);
     }
 
-    private static void OnTextPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+    private static void TextPropertyChanged(BindableObject bindable, object oldValue, object newValue)
     {
-      SetIndicatorProperty<string>(bindable, newValue,
+      ControlHelpers.SetProperty<ActivitySpinner, string>(bindable, newValue,
         (activitySpinner, propertyValue) =>
         {
-          if (!string.IsNullOrWhiteSpace(propertyValue))
-          {
-            activitySpinner.SpinnerText.Text = propertyValue;
-            activitySpinner.SpinnerText.IsVisible = true;
-          }
+          activitySpinner.SpinnerText.Text = propertyValue;
+          activitySpinner.SpinnerText.IsVisible = !string.IsNullOrWhiteSpace(propertyValue);
         });
     }
 
-    private static void SetIndicatorProperty<TPropertyType>(BindableObject bindable, object newValue, Action<ActivitySpinner, TPropertyType> propertyAssigner)
-    {
-      if (!(bindable is ActivitySpinner activitySpinner) || !(newValue is TPropertyType propertyValue))
-      {
-        return;
-      }
-
-      propertyAssigner.Invoke(activitySpinner, propertyValue);
-    }
-
-    private static async Task SetIndicatorPropertyAsync<TPropertyType>(BindableObject bindable, object newValue, Func<ActivitySpinner, TPropertyType, Task> propertyAssigner)
-    {
-      if (!(bindable is ActivitySpinner activitySpinner) || !(newValue is TPropertyType propertyValue))
-      {
-        return;
-      }
-
-      await propertyAssigner.Invoke(activitySpinner, propertyValue);
-    }
-
-    private static async Task ToggleVisibility(ActivitySpinner activitySpinner)
+    private static async Task SetLoadingVisibility(ActivitySpinner activitySpinner)
     {
       try
       {

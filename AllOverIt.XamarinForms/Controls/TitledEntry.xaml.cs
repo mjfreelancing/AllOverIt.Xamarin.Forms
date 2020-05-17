@@ -114,13 +114,14 @@ namespace AllOverIt.XamarinForms.Controls
       set => SetValue(EntryFontAttributesProperty, value);
     }
 
-    public static readonly BindableProperty EntryIsTextPredictionEnabledProperty = BindableProperty.Create(nameof(EntryIsTextPredictionEnabled), typeof(bool), typeof(TitledEntry), false);
+    // disabled for now - unit test shows False is never set
+    //public static readonly BindableProperty EntryIsTextPredictionEnabledProperty = BindableProperty.Create(nameof(EntryIsTextPredictionEnabled), typeof(bool), typeof(TitledEntry), false);
 
-    public bool EntryIsTextPredictionEnabled
-    {
-      get => (bool)GetValue(EntryIsTextPredictionEnabledProperty);
-      set => SetValue(EntryIsTextPredictionEnabledProperty, value);
-    }
+    //public bool EntryIsTextPredictionEnabled
+    //{
+    //  get => (bool)GetValue(EntryIsTextPredictionEnabledProperty);
+    //  set => SetValue(EntryIsTextPredictionEnabledProperty, value);
+    //}
 
     public static readonly BindableProperty EntryIsEnabledProperty = BindableProperty.Create(nameof(EntryIsEnabled), typeof(bool), typeof(TitledEntry), true);
     
@@ -211,7 +212,7 @@ namespace AllOverIt.XamarinForms.Controls
       InputEntry.SetBinding(Entry.IsEnabledProperty, nameof(EntryIsEnabled));
       InputEntry.SetBinding(Entry.PlaceholderProperty, nameof(EntryPlaceholder));
       InputEntry.SetBinding(Entry.PlaceholderColorProperty, nameof(EntryPlaceholderColor));
-      InputEntry.SetBinding(Entry.IsTextPredictionEnabledProperty, nameof(EntryIsTextPredictionEnabled));
+      //InputEntry.SetBinding(Entry.IsTextPredictionEnabledProperty, nameof(EntryIsTextPredictionEnabled));
       InputEntry.SetBinding(Entry.IsPasswordProperty, nameof(EntryIsPassword));
     }
 
