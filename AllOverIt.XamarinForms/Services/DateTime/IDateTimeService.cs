@@ -4,5 +4,6 @@
   {
     System.DateTime CurrentDate { get; }
     System.DateTime CurrentDateTime { get; }
+    System.DateTime CurrentDateTimeUtc { get; }
   }
 }

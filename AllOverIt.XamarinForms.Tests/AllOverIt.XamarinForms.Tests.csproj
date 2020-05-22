@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AllOverIt" Version="0.3.0" />
+    <PackageReference Include="AllOverIt" Version="0.3.1" />
     <PackageReference Include="AllOverIt.Fixture" Version="1.0.10" />
     <PackageReference Include="FakeItEasy" Version="6.0.1" />
     <PackageReference Include="FluentAssertions" Version="5.10.3" />

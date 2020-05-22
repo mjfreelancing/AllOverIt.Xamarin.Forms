@@ -5,18 +5,22 @@ namespace AllOverIt.XamarinForms.Validation.Rules
   public class IsLessThanOrEqualRule<TValue> : ValidationRuleBase<TValue>
     where TValue : IComparable
   {
-    private readonly Func<TValue> _selector;
+    private readonly TValue _value;
 
-    public IsLessThanOrEqualRule(Func<TValue> selector, string validationMessage)
+    public IsLessThanOrEqualRule(TValue value)
+      : this(value, $"Value must be less than or equal to {value}")
+    {
+    }
+
+    public IsLessThanOrEqualRule(TValue value, string validationMessage)
       : base(validationMessage)
     {
-      _selector = selector;
+      _value = value;
     }
 
     public override bool IsSatisfiedBy(TValue value)
     {
-      var modelValue = _selector.Invoke();
-      return value.CompareTo(modelValue) <= 0;
+      return value.CompareTo(_value) <= 0;
     }
   }
 }

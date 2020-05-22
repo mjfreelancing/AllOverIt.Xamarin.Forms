@@ -29,13 +29,16 @@ namespace AllOverIt.XamarinForms.Validation
     {
       var property = new ValidatableObject<TType>();
 
-      property.PropertyChanged += (sender, args) =>
+      if (onPropertyChanged != null)
       {
-        if (args.PropertyName == nameof(property.Value))
+        property.PropertyChanged += (sender, args) =>
         {
-          onPropertyChanged.Invoke(property);
-        }
-      };
+          if (args.PropertyName == nameof(property.Value))
+          {
+            onPropertyChanged.Invoke(property);
+          }
+        };
+      }
 
       property.AddValidations(rules);
 

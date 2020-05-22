@@ -17,7 +17,7 @@ namespace AllOverIt.XamarinForms.Validation
     public IReadOnlyList<string> Errors
     {
       get => _errors;
-      set => SetValue(ref _errors, value, () =>
+      private set => SetValue(ref _errors, value, () =>
       {
         RaisePropertyChanged(nameof(FirstError));
       });
@@ -34,7 +34,7 @@ namespace AllOverIt.XamarinForms.Validation
     public bool IsValid
     {
       get => _isValid;
-      set => SetValue(ref _isValid, value);
+      private set => SetValue(ref _isValid, value);
     }
 
     public ValidatableObject()
@@ -61,7 +61,7 @@ namespace AllOverIt.XamarinForms.Validation
       return IsValid;
     }
 
-    protected void SetValue<TPropertyType>(ref TPropertyType property, TPropertyType value, Action action = null, [CallerMemberName] string propertyName = null)
+    private void SetValue<TPropertyType>(ref TPropertyType property, TPropertyType value, Action action = null, [CallerMemberName] string propertyName = null)
     {
       if (!EqualityComparer<TPropertyType>.Default.Equals(property, value))
       {
