@@ -15,6 +15,7 @@ namespace AllOverIt.XamarinForms.Tests.Scaffolding
     private readonly Func<Uri, CancellationToken, Task<Stream>> _getStreamAsync;
 
     public bool IsInvokeRequired => false;
+    public OSAppTheme RequestedTheme { get; }
     public string RuntimePlatform { get; set; }
 
     public MockPlatformServices(Action<Action> invokeOnMainThread = null, Action<Uri> openUriAction = null,
@@ -65,6 +66,11 @@ namespace AllOverIt.XamarinForms.Tests.Scaffolding
 
         _ => throw new ArgumentOutOfRangeException(nameof(size)),
       };
+    }
+
+    public Color GetNamedColor(string name)
+    {
+      throw new NotImplementedException();
     }
 
     public Task<Stream> GetStreamAsync(Uri uri, CancellationToken cancellationToken)

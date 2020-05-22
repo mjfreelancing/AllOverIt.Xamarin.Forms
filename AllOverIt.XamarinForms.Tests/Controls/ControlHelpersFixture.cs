@@ -5,6 +5,8 @@ using Xunit;
 
 namespace AllOverIt.XamarinForms.Tests.Controls
 {
+  // need to create controls non-parallel to prevent init issues
+  [Collection(nameof(ControlCollection))]
   public class ControlHelpersFixture : AllOverItFixtureBase
   {
     private class DummyPage : Page

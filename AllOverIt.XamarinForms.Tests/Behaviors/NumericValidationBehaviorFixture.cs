@@ -1,5 +1,6 @@
 ﻿using AllOverIt.XamarinForms.Behaviors;
 using AllOverIt.XamarinForms.Behaviors.Base;
+using AllOverIt.XamarinForms.Tests.Controls;
 using FluentAssertions;
 using System.Linq;
 using Xamarin.Forms;
@@ -7,6 +8,8 @@ using Xunit;
 
 namespace AllOverIt.XamarinForms.Tests.Behaviors
 {
+  // need to create controls non-parallel to prevent init issues
+  [Collection(nameof(ControlCollection))]
   public class NumericValidationBehaviorFixture : AllOverItFixtureBase
   {
     public NumericValidationBehaviorFixture()

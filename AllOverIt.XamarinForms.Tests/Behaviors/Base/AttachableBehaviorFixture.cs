@@ -1,4 +1,5 @@
 ﻿using AllOverIt.XamarinForms.Behaviors.Base;
+using AllOverIt.XamarinForms.Tests.Controls;
 using FluentAssertions;
 using System;
 using Xamarin.Forms;
@@ -6,6 +7,8 @@ using Xunit;
 
 namespace AllOverIt.XamarinForms.Tests.Behaviors.Base
 {
+  // need to create controls non-parallel to prevent init issues
+  [Collection(nameof(ControlCollection))]
   public class AttachableBehaviorFixture : AllOverItFixtureBase
   {
     private class DummyAttachableBehavior : AttachableBehavior<DummyAttachableBehavior, Entry>

@@ -1,4 +1,5 @@
 ﻿using AllOverIt.XamarinForms.Behaviors;
+using AllOverIt.XamarinForms.Tests.Controls;
 using FakeItEasy;
 using FluentAssertions;
 using System;
@@ -10,6 +11,8 @@ using Xunit;
 
 namespace AllOverIt.XamarinForms.Tests.Behaviors
 {
+  // need to create controls non-parallel to prevent init issues
+  [Collection(nameof(ControlCollection))]
   public class SelectedItemCommandBehaviorFixture : AllOverItFixtureBase
   {
     private class DummyCommand : ICommand

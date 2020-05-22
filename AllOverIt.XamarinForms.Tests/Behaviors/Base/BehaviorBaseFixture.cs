@@ -1,10 +1,13 @@
 ﻿using AllOverIt.XamarinForms.Behaviors.Base;
+using AllOverIt.XamarinForms.Tests.Controls;
 using FluentAssertions;
 using Xamarin.Forms;
 using Xunit;
 
 namespace AllOverIt.XamarinForms.Tests.Behaviors.Base
 {
+  // need to create controls non-parallel to prevent init issues
+  [Collection(nameof(ControlCollection))]
   public class BehaviorBaseFixture : AllOverItFixtureBase
   {
     private class DummyBehavior : BehaviorBase<ListView>

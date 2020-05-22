@@ -1,5 +1,6 @@
 ﻿using AllOverIt.XamarinForms.Behaviors;
 using AllOverIt.XamarinForms.Commands;
+using AllOverIt.XamarinForms.Tests.Controls;
 using FluentAssertions;
 using System;
 using System.Linq;
@@ -9,6 +10,8 @@ using Xunit;
 
 namespace AllOverIt.XamarinForms.Tests.Behaviors
 {
+  // need to create controls non-parallel to prevent init issues
+  [Collection(nameof(ControlCollection))]
   public class EventToCommandBehaviorFixture : AllOverItFixtureBase
   {
     private class DummyCommand : EventCommandBase
