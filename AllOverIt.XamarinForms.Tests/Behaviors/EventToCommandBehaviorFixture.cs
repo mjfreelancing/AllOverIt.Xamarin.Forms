@@ -3,6 +3,7 @@ using AllOverIt.XamarinForms.Commands;
 using FluentAssertions;
 using System;
 using System.Linq;
+using System.Reflection;
 using Xamarin.Forms;
 using Xunit;
 
@@ -17,7 +18,7 @@ namespace AllOverIt.XamarinForms.Tests.Behaviors
 
       public override bool Execute(object sender, object parameter)
       {
-        var args = (TextChangedEventArgs) parameter;
+        var args = (TextChangedEventArgs)parameter;
 
         ExecutingContext = BindingContext;
         Value = args.NewTextValue;
@@ -29,6 +30,14 @@ namespace AllOverIt.XamarinForms.Tests.Behaviors
     public EventToCommandBehaviorFixture()
     {
       InitFormsFixture();
+    }
+
+    [Fact]
+    public void Should_Have_ContentProperty_Attribute()
+    {
+      var actual = typeof(EventToCommandBehavior).GetCustomAttribute(typeof(ContentPropertyAttribute));
+
+      actual.Should().NotBeNull();
     }
 
     [Fact]

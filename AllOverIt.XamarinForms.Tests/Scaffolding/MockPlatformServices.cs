@@ -40,7 +40,7 @@ namespace AllOverIt.XamarinForms.Tests.Scaffolding
 
     public Assembly[] GetAssemblies()
     {
-      return AppDomain.CurrentDomain.GetAssemblies(); //new Assembly[0];
+      return AppDomain.CurrentDomain.GetAssemblies();
     }
 
     public string GetMD5Hash(string input)

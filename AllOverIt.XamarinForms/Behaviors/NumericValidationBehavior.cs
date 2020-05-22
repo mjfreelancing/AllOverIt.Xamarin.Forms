@@ -4,7 +4,7 @@ using Xamarin.Forms;
 
 namespace AllOverIt.XamarinForms.Behaviors
 {
-  public class NumericValidationBehavior : AttachableBehavior<NumericValidationBehavior, Entry>
+  public class NumericValidationBehavior : BehaviorBase<Entry>
   {
     public static readonly BindableProperty ValidTextColorProperty = BindableProperty.Create(nameof(ValidTextColor), typeof(Color), typeof(NumericValidationBehavior), Color.Default);
 

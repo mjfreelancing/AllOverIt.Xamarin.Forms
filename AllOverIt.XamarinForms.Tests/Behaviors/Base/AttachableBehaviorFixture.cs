@@ -1,4 +1,4 @@
-﻿using AllOverIt.XamarinForms.Behaviors;
+﻿using AllOverIt.XamarinForms.Behaviors.Base;
 using FluentAssertions;
 using System;
 using Xamarin.Forms;
@@ -8,6 +8,10 @@ namespace AllOverIt.XamarinForms.Tests.Behaviors.Base
 {
   public class AttachableBehaviorFixture : AllOverItFixtureBase
   {
+    private class DummyAttachableBehavior : AttachableBehavior<DummyAttachableBehavior, Entry>
+    {
+    }
+
     public AttachableBehaviorFixture()
     {
       InitFormsFixture();
@@ -20,7 +24,7 @@ namespace AllOverIt.XamarinForms.Tests.Behaviors.Base
 
       var setter = new Setter
       {
-        Property = NumericValidationBehavior.AttachBehaviorProperty,
+        Property = DummyAttachableBehavior.AttachBehaviorProperty,
         Value = true
       };
 
@@ -32,7 +36,7 @@ namespace AllOverIt.XamarinForms.Tests.Behaviors.Base
       };
 
       entry.Behaviors.Should().HaveCount(1);
-      entry.Behaviors[0].Should().BeOfType<NumericValidationBehavior>();
+      entry.Behaviors[0].Should().BeOfType<DummyAttachableBehavior>();
     }
 
     [Fact]
@@ -42,7 +46,7 @@ namespace AllOverIt.XamarinForms.Tests.Behaviors.Base
 
       var setter = new Setter
       {
-        Property = NumericValidationBehavior.AttachBehaviorProperty,
+        Property = DummyAttachableBehavior.AttachBehaviorProperty,
         Value = true
       };
 
@@ -67,7 +71,7 @@ namespace AllOverIt.XamarinForms.Tests.Behaviors.Base
 
       var setter = new Setter
       {
-        Property = NumericValidationBehavior.AttachBehaviorProperty,
+        Property = DummyAttachableBehavior.AttachBehaviorProperty,
         Value = false
       };
 
@@ -88,7 +92,7 @@ namespace AllOverIt.XamarinForms.Tests.Behaviors.Base
 
       var setter = new Setter
       {
-        Property = NumericValidationBehavior.AttachBehaviorProperty,
+        Property = DummyAttachableBehavior.AttachBehaviorProperty,
         Value = true
       };
 
@@ -99,7 +103,7 @@ namespace AllOverIt.XamarinForms.Tests.Behaviors.Base
         Style = style1
       };
 
-      entry.Behaviors[0].Should().BeOfType<NumericValidationBehavior>();
+      entry.Behaviors[0].Should().BeOfType<DummyAttachableBehavior>();
 
       var style2 = new Style(typeof(Entry));
       setter.Value = false;
@@ -116,7 +120,7 @@ namespace AllOverIt.XamarinForms.Tests.Behaviors.Base
 
       var setter = new Setter
       {
-        Property = NumericValidationBehavior.AttachBehaviorProperty,
+        Property = DummyAttachableBehavior.AttachBehaviorProperty,
         Value = true
       };
 
@@ -148,7 +152,7 @@ namespace AllOverIt.XamarinForms.Tests.Behaviors.Base
 
       var setter = new Setter
       {
-        Property = NumericValidationBehavior.AttachBehaviorProperty,
+        Property = DummyAttachableBehavior.AttachBehaviorProperty,
         Value = expected
       };
 
@@ -159,7 +163,7 @@ namespace AllOverIt.XamarinForms.Tests.Behaviors.Base
         Style = style
       };
 
-      var actual = NumericValidationBehavior.GetAttachBehavior(entry);
+      var actual = DummyAttachableBehavior.GetAttachBehavior(entry);
 
       actual.Should().Be(expected);
     }
@@ -171,21 +175,20 @@ namespace AllOverIt.XamarinForms.Tests.Behaviors.Base
     {
       var entry = new Entry();
 
-      NumericValidationBehavior.SetAttachBehavior(entry, expected);
+      DummyAttachableBehavior.SetAttachBehavior(entry, expected);
 
-      var actual = NumericValidationBehavior.GetAttachBehavior(entry);
+      var actual = DummyAttachableBehavior.GetAttachBehavior(entry);
 
       actual.Should().Be(expected);
 
       if (expected)
       {
-        entry.Behaviors[0].Should().BeOfType<NumericValidationBehavior>();
+        entry.Behaviors[0].Should().BeOfType<DummyAttachableBehavior>();
       }
       else
       {
         entry.Behaviors.Should().BeEmpty();
       }
-      
     }
   }
 }
