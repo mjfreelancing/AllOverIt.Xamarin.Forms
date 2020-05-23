@@ -4,7 +4,15 @@ using Xamarin.Forms;
 
 namespace AllOverIt.XamarinForms.Behaviors.Base
 {
-  // only inherit from AttachableBehavior if the behavior can function as-is without specific configuration of its properties
+  // What are attached properties good for:
+  // https://codemilltech.com/attached-properties-what-are-they-good-for/
+
+  /// <summary>
+  /// Extends a behavior to make it attachable, making it possible to add or remove the behavior via a style. 
+  /// </summary>
+  /// <typeparam name="TBehavior">The behavior type.</typeparam>
+  /// <typeparam name="TBindable">The type the behavior is bindable to.</typeparam>
+  /// <remarks>Only inherit from AttachableBehavior if the behavior can function as-is without specific configuration of its properties.</remarks>
   public class AttachableBehavior<TBehavior, TBindable> : BehaviorBase<TBindable>
     where TBehavior : Behavior, new()
     where TBindable : VisualElement
@@ -18,6 +26,9 @@ namespace AllOverIt.XamarinForms.Behaviors.Base
     // </Style.Setters>
     // </Style>
 
+    /// <summary>
+    /// Provides the ability to add or remove the behavior via a style, for example.
+    /// </summary>
     public static readonly BindableProperty AttachBehaviorProperty = BindableProperty.CreateAttached("AttachBehavior", typeof(bool), typeof(TBehavior), false, propertyChanged: OnAttachBehaviorChanged);
 
     public static bool GetAttachBehavior(BindableObject bindable) => (bool)bindable.GetValue(AttachBehaviorProperty);

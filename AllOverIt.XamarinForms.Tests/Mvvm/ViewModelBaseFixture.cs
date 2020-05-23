@@ -12,7 +12,7 @@ namespace AllOverIt.XamarinForms.Tests.Mvvm
   {
     private class DummyViewModel : ViewModelBase
     {
-      private IList<string> _propertyNamesNotified = new List<string>();
+      private readonly IList<string> _propertyNamesNotified = new List<string>();
 
       public ILogger ViewModelLogger => Logger;
       public IEnumerable<string> PropertyNamesNotified => _propertyNamesNotified;
@@ -23,6 +23,11 @@ namespace AllOverIt.XamarinForms.Tests.Mvvm
         {
           _propertyNamesNotified.Add(args.PropertyName);
         };
+      }
+
+      public DummyViewModel(ILogger logger)
+        : base(logger)
+      {
       }
 
       public DummyViewModel(Lazy<ILogger> logger)
@@ -71,6 +76,16 @@ namespace AllOverIt.XamarinForms.Tests.Mvvm
         var subject = new DummyViewModel();
 
         subject.ViewModelLogger.Should().BeNull();
+      }
+
+      [Fact]
+      public void Should_Return_Logger()
+      {
+        var loggerFake = A.Fake<ILogger>();
+
+        var subject = new DummyViewModel(loggerFake);
+
+        subject.ViewModelLogger.Should().BeSameAs(loggerFake);
       }
 
       [Fact]

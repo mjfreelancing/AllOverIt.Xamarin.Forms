@@ -5,10 +5,16 @@ using Xamarin.Forms;
 
 namespace AllOverIt.XamarinForms.Behaviors
 {
+  /// <summary>
+  /// A behavior that executes a command when a ListView item is selected.
+  /// </summary>
   public class SelectedItemCommandBehavior : BehaviorBase<ListView>
   {
     public static readonly BindableProperty CommandProperty = BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(SelectedItemCommandBehavior));
 
+    /// <summary>
+    /// The command to execute when a ListView item is selected.
+    /// </summary>
     public ICommand Command
     {
       get => (ICommand)GetValue(CommandProperty);
@@ -18,6 +24,9 @@ namespace AllOverIt.XamarinForms.Behaviors
     // refers to a converter for the event args
     public static readonly BindableProperty ConverterProperty = BindableProperty.Create(nameof(Converter), typeof(IValueConverter), typeof(SelectedItemCommandBehavior));
 
+    /// <summary>
+    /// An optional converter to apply against the <see cref="SelectedItemChangedEventArgs"/> associated with the selected item.
+    /// </summary>
     public IValueConverter Converter
     {
       get => (IValueConverter)GetValue(ConverterProperty);
@@ -26,6 +35,9 @@ namespace AllOverIt.XamarinForms.Behaviors
 
     public static readonly BindableProperty ConverterParameterProperty = BindableProperty.Create(nameof(ConverterParameter), typeof(object), typeof(SelectedItemCommandBehavior));
 
+    /// <summary>
+    /// An optional parameter to pass to the <see cref="Converter"/>, when used.
+    /// </summary>
     public object ConverterParameter
     {
       get => GetValue(ConverterParameterProperty);

@@ -43,7 +43,7 @@
 		<controls:ActivitySpinner
 			x:Name="Spinner"
 			IndicatorColor="Aquamarine"
-			IsLoading="{Binding LookBusy}"
+			IsBusy="{Binding LookBusy}"
 			Text="All Over It !!!"
 			TextColor="Purple"
 			TextFontAttributes="Bold,Italic"

@@ -1,4 +1,5 @@
 ﻿using AllOverIt.Helpers;
+using AllOverIt.XamarinForms.Helpers;
 using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -7,23 +8,32 @@ using Xamarin.Forms.Xaml;
 namespace AllOverIt.XamarinForms.Controls
 {
   // Inspired by https://progrunning.net/creating-custom-xamarin-forms-loading-indicator-with-animations/
-  //
+
+  /// <summary>
+  /// An activity indicator with a label.
+  /// </summary>
   [XamlCompilation(XamlCompilationOptions.Compile)]
   public partial class ActivitySpinner
   {
     private static readonly SemaphoreSlim AnimationSemaphore = new SemaphoreSlim(1);
     private const uint DefaultFadeDuration = 400;
 
-    public static readonly BindableProperty IsLoadingProperty = BindableProperty.Create(nameof(IsLoading), typeof(bool), typeof(ActivitySpinner), default(bool), propertyChanged: IsLoadingPropertyChanged);
+    public static readonly BindableProperty IsBusyProperty = BindableProperty.Create(nameof(IsBusy), typeof(bool), typeof(ActivitySpinner), default(bool), propertyChanged: IsBusyPropertyChanged);
 
-    public bool IsLoading
+    /// <summary>
+    /// The activity indicator and label are visible when indicating a busy state.
+    /// </summary>
+    public bool IsBusy
     {
-      get => (bool)GetValue(IsLoadingProperty);
-      set => SetValue(IsLoadingProperty, value);
+      get => (bool)GetValue(IsBusyProperty);
+      set => SetValue(IsBusyProperty, value);
     }
 
     public static readonly BindableProperty IndicatorColorProperty = BindableProperty.Create(nameof(IndicatorColor), typeof(Color), typeof(ActivitySpinner), default(Color));
 
+    /// <summary>
+    /// The color of the activity indicator.
+    /// </summary>
     public Color IndicatorColor
     {
       get => (Color)GetValue(IndicatorColorProperty);
@@ -32,6 +42,9 @@ namespace AllOverIt.XamarinForms.Controls
     
     public static readonly BindableProperty TextProperty = BindableProperty.Create(nameof(Text), typeof(string), typeof(ActivitySpinner), default(string), propertyChanged: TextPropertyChanged);
 
+    /// <summary>
+    /// The label text.
+    /// </summary>
     public string Text
     {
       get => (string)GetValue(TextProperty);
@@ -40,6 +53,9 @@ namespace AllOverIt.XamarinForms.Controls
 
     public static readonly BindableProperty TextColorProperty = BindableProperty.Create(nameof(TextColor), typeof(Color), typeof(ActivitySpinner), default(Color));
 
+    /// <summary>
+    /// The label text color.
+    /// </summary>
     public Color TextColor
     {
       get => (Color)GetValue(TextColorProperty);
@@ -48,6 +64,9 @@ namespace AllOverIt.XamarinForms.Controls
 
     public static readonly BindableProperty TextFontFamilyProperty = BindableProperty.Create(nameof(TextFontFamily), typeof(string), typeof(ActivitySpinner), default(string));
 
+    /// <summary>
+    /// The label text font family.
+    /// </summary>
     public string TextFontFamily
     {
       get => (string)GetValue(TextFontFamilyProperty);
@@ -56,6 +75,9 @@ namespace AllOverIt.XamarinForms.Controls
 
     public static readonly BindableProperty TextFontSizeProperty = BindableProperty.Create(nameof(TextFontSize), typeof(double), typeof(ActivitySpinner), default(double));
 
+    /// <summary>
+    /// The label text font size.
+    /// </summary>
     public double TextFontSize
     {
       get => (double)GetValue(TextFontSizeProperty);
@@ -64,6 +86,9 @@ namespace AllOverIt.XamarinForms.Controls
     
     public static readonly BindableProperty TextFontAttributesProperty = BindableProperty.Create(nameof(TextFontAttributes), typeof(FontAttributes), typeof(ActivitySpinner), default(FontAttributes));
 
+    /// <summary>
+    /// The label text font attributes.
+    /// </summary>
     public FontAttributes TextFontAttributes
     {
       get => (FontAttributes)GetValue(TextFontAttributesProperty);
@@ -72,12 +97,18 @@ namespace AllOverIt.XamarinForms.Controls
     
     public static readonly BindableProperty FadeDurationProperty = BindableProperty.Create(nameof(FadeDuration), typeof(uint), typeof(ActivitySpinner), DefaultFadeDuration);
 
+    /// <summary>
+    /// The fade duration applied when toggling the control's visibility.
+    /// </summary>
     public uint FadeDuration
     {
       get => (uint)GetValue(FadeDurationProperty);
       set => SetValue(FadeDurationProperty, value);
     }
 
+    /// <summary>
+    /// Initializes the control.
+    /// </summary>
     public ActivitySpinner()
     {
       InitializeComponent();
@@ -104,7 +135,7 @@ namespace AllOverIt.XamarinForms.Controls
       SpinnerText.SetBinding(Label.FontAttributesProperty, nameof(TextFontAttributes));
     }
 
-    private static async void IsLoadingPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+    private static async void IsBusyPropertyChanged(BindableObject bindable, object oldValue, object newValue)
     {
       var spinner = (bindable as ActivitySpinner).WhenNotNull(nameof(bindable));
 
@@ -129,7 +160,7 @@ namespace AllOverIt.XamarinForms.Controls
 
         await AnimationSemaphore.WaitAsync();
 
-        if (activitySpinner.IsLoading)
+        if (activitySpinner.IsBusy)
         {
           activitySpinner.Spinner.IsRunning = true;
           activitySpinner.IsVisible = true;

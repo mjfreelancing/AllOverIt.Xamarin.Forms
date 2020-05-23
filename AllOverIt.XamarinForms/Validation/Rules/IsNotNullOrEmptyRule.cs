@@ -1,5 +1,8 @@
 ﻿namespace AllOverIt.XamarinForms.Validation.Rules
 {
+  /// <summary>
+  /// Represents a validation rule to validate a string value is not null or whitespace.
+  /// </summary>
   public class IsNotNullOrEmptyRule : ValidationRuleBase<string>
   {
     public IsNotNullOrEmptyRule() 

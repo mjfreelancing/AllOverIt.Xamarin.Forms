@@ -1,4 +1,5 @@
 ﻿using AllOverIt.Extensions;
+using AllOverIt.Helpers;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,30 +13,37 @@ namespace AllOverIt.XamarinForms.Collections
   // ObservableList is based on ObservableCollection found at https://github.com/jamesmontemagno/mvvm-helpers
   // ObservableList is interface based and is not 100% compatible with ObservableCollection
 
-  // cannot nest within ObservableList because a static field should not be declared within a generic class
-  internal static class ObservableListEventArgs
-  {
-    internal static readonly PropertyChangedEventArgs CountPropertyChanged = new PropertyChangedEventArgs("Count");
-    internal static readonly PropertyChangedEventArgs IndexerPropertyChanged = new PropertyChangedEventArgs("Item[]");
-  }
-
+  /// <summary>
+  /// A strongly typed observable list that provides notifications when items are added, removed, or the list is refreshed.
+  /// </summary>
+  /// <typeparam name="TType">The type to be stored in the list.</typeparam>
   public class ObservableList<TType> : ObservableCollection<TType>
   {
+    /// <summary>
+    /// Default initializes an empty list.
+    /// </summary>
     public ObservableList()
     {
     }
 
+    /// <summary>
+    /// Initializes the list with an existing collection of items.
+    /// </summary>
+    /// <param name="collection">The collection of items to initialize the list with.</param>
     public ObservableList(IEnumerable<TType> collection)
       : base(collection)
     {
     }
 
+    /// <summary>
+    /// Adds one or more items to the list and raises a notification if items are added.
+    /// </summary>
+    /// <param name="collection">The collection of items to add to the collection.</param>
+    /// <param name="mode">The notification mode. Valid values include <see cref="NotifyCollectionChangedAction.Add"/> or
+    /// <see cref="NotifyCollectionChangedAction.Reset"/>.</param>
     public void AddRange(IEnumerable<TType> collection, NotifyCollectionChangedAction mode = NotifyCollectionChangedAction.Add)
     {
-      if (collection == null)
-      {
-        throw new ArgumentNullException(nameof(collection));
-      }
+      var newItems = collection.WhenNotNull(nameof(collection)).AsReadOnlyList();
 
       if (mode != NotifyCollectionChangedAction.Add && mode != NotifyCollectionChangedAction.Reset)
       {
@@ -43,8 +51,6 @@ namespace AllOverIt.XamarinForms.Collections
       }
 
       CheckReentrancy();
-
-      var newItems = collection.AsList();
 
       if (newItems.Count == 0)
       {
@@ -64,12 +70,15 @@ namespace AllOverIt.XamarinForms.Collections
       }
     }
 
+    /// <summary>
+    /// Removes one or more items from the list and raises a notification if there is a change.
+    /// </summary>
+    /// <param name="collection">The collection of items to remove from the collection.</param>
+    /// <param name="mode">The notification mode. Valid values include <see cref="NotifyCollectionChangedAction.Remove"/> or
+    /// <see cref="NotifyCollectionChangedAction.Reset"/>.</param>
     public void RemoveRange(IEnumerable<TType> collection, NotifyCollectionChangedAction mode = NotifyCollectionChangedAction.Remove)
     {
-      if (collection == null)
-      {
-        throw new ArgumentNullException(nameof(collection));
-      }
+      var newItems = collection.WhenNotNull(nameof(collection)).AsReadOnlyList();
 
       if (mode != NotifyCollectionChangedAction.Remove && mode != NotifyCollectionChangedAction.Reset)
       {
@@ -80,22 +89,25 @@ namespace AllOverIt.XamarinForms.Collections
 
       if (mode == NotifyCollectionChangedAction.Reset)
       {
-        RemoveUsingNotificationReset(collection);
+        RemoveUsingNotificationReset(newItems);
       }
       else
       {
-        RemoveUsingNotificationRemove(collection);
+        RemoveUsingNotificationRemove(newItems);
       }
     }
 
+    /// <summary>
+    /// Replaces the current list of items with a single item.
+    /// </summary>
+    /// <param name="item">The item that replaces the current list of items.</param>
+    /// <remarks>If the provided <see cref="item"/> replaces the current list contents then a <see cref="NotifyCollectionChangedAction.Reset"/>
+    /// notification will be raised.</remarks>
     public void Replace(TType item) => ReplaceRange(new TType[] { item });
 
     public void ReplaceRange(IEnumerable<TType> collection)
     {
-      if (collection == null)
-      {
-        throw new ArgumentNullException(nameof(collection));
-      }
+      var newItems = collection.WhenNotNull(nameof(collection)).AsReadOnlyList();
 
       CheckReentrancy();
       
@@ -103,7 +115,7 @@ namespace AllOverIt.XamarinForms.Collections
 
       Items.Clear();
 
-      AddItems(collection);
+      AddItems(newItems);
 
       if (originallyEmpty && Items.Count == 0)
       {
@@ -155,5 +167,12 @@ namespace AllOverIt.XamarinForms.Collections
       OnPropertyChanged(ObservableListEventArgs.IndexerPropertyChanged);
       OnCollectionChanged(new NotifyCollectionChangedEventArgs(action, changedItems, startingIndex));
     }
+  }
+
+  // cannot nest within ObservableList because a static field should not be declared within a generic class
+  internal static class ObservableListEventArgs
+  {
+    internal static readonly PropertyChangedEventArgs CountPropertyChanged = new PropertyChangedEventArgs("Count");
+    internal static readonly PropertyChangedEventArgs IndexerPropertyChanged = new PropertyChangedEventArgs("Item[]");
   }
 }

@@ -23,10 +23,16 @@ namespace AllOverIt.XamarinForms.Behaviors
 
     public static readonly BindableProperty EventCommandsProperty = BindableProperty.Create(nameof(Commands), typeof(IList<EventCommandBase>), typeof(EventToCommandBehavior));
 
+    /// <summary>
+    /// The list of commands to be execute when the event is fired.
+    /// </summary>
     public IList<EventCommandBase> Commands => (IList<EventCommandBase>)GetValue(EventCommandsProperty);
 
     public static readonly BindableProperty EventNameProperty = BindableProperty.Create(nameof(EventName), typeof(string), typeof(EventToCommandBehavior), propertyChanged: OnEventNameChanged);
 
+    /// <summary>
+    /// The name of the event that, when raised, executes all <see cref="Commands"/>.
+    /// </summary>
     public string EventName
     {
       get => (string)GetValue(EventNameProperty);

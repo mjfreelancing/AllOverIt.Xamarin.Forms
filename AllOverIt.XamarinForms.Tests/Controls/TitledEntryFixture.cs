@@ -37,7 +37,7 @@ namespace AllOverIt.XamarinForms.Tests.Controls
         var subject = CreatedTitledEntry();
         subject.TitleText = expected;
 
-        var label = ControlHelpers.GetNonPublicFieldFromControl<Label>(subject, "EntryTitle");
+        var label = ReflectionHelpers.GetNonPublicFieldFromControl<Label>(subject, "EntryTitle");
 
         label.Text.Should().Be(expected);
       }
@@ -61,7 +61,7 @@ namespace AllOverIt.XamarinForms.Tests.Controls
         var subject = CreatedTitledEntry();
         subject.TitleTextColor = expected;
 
-        var label = ControlHelpers.GetNonPublicFieldFromControl<Label>(subject, "EntryTitle");
+        var label = ReflectionHelpers.GetNonPublicFieldFromControl<Label>(subject, "EntryTitle");
 
         label.TextColor.Should().Be(expected);
       }
@@ -85,7 +85,7 @@ namespace AllOverIt.XamarinForms.Tests.Controls
         var subject = CreatedTitledEntry();
         subject.TitleFontSize = expected;
 
-        var label = ControlHelpers.GetNonPublicFieldFromControl<Label>(subject, "EntryTitle");
+        var label = ReflectionHelpers.GetNonPublicFieldFromControl<Label>(subject, "EntryTitle");
 
         label.FontSize.Should().Be(expected);
       }
@@ -109,7 +109,7 @@ namespace AllOverIt.XamarinForms.Tests.Controls
         var subject = CreatedTitledEntry();
         subject.TitleFontFamily = expected;
 
-        var label = ControlHelpers.GetNonPublicFieldFromControl<Label>(subject, "EntryTitle");
+        var label = ReflectionHelpers.GetNonPublicFieldFromControl<Label>(subject, "EntryTitle");
 
         label.FontFamily.Should().Be(expected);
       }
@@ -133,7 +133,7 @@ namespace AllOverIt.XamarinForms.Tests.Controls
         var subject = CreatedTitledEntry();
         subject.TitleFontAttributes = expected;
 
-        var label = ControlHelpers.GetNonPublicFieldFromControl<Label>(subject, "EntryTitle");
+        var label = ReflectionHelpers.GetNonPublicFieldFromControl<Label>(subject, "EntryTitle");
 
         label.FontAttributes.Should().Be(expected);
       }
@@ -160,7 +160,7 @@ namespace AllOverIt.XamarinForms.Tests.Controls
         var subject = CreatedTitledEntry();
         subject.EntryText = expected;
 
-        var entry = ControlHelpers.GetNonPublicFieldFromControl<Entry>(subject, "InputEntry");
+        var entry = ReflectionHelpers.GetNonPublicFieldFromControl<Entry>(subject, "InputEntry");
 
         entry.Text.Should().Be(expected);
       }
@@ -184,7 +184,7 @@ namespace AllOverIt.XamarinForms.Tests.Controls
         var subject = CreatedTitledEntry();
         subject.EntryTextColor = expected;
 
-        var entry = ControlHelpers.GetNonPublicFieldFromControl<Entry>(subject, "InputEntry");
+        var entry = ReflectionHelpers.GetNonPublicFieldFromControl<Entry>(subject, "InputEntry");
 
         entry.TextColor.Should().Be(expected);
       }
@@ -208,7 +208,7 @@ namespace AllOverIt.XamarinForms.Tests.Controls
         var subject = CreatedTitledEntry();
         subject.EntryPlaceholder = expected;
 
-        var entry = ControlHelpers.GetNonPublicFieldFromControl<Entry>(subject, "InputEntry");
+        var entry = ReflectionHelpers.GetNonPublicFieldFromControl<Entry>(subject, "InputEntry");
 
         entry.Placeholder.Should().Be(expected);
       }
@@ -232,7 +232,7 @@ namespace AllOverIt.XamarinForms.Tests.Controls
         var subject = CreatedTitledEntry();
         subject.EntryPlaceholderColor = expected;
 
-        var entry = ControlHelpers.GetNonPublicFieldFromControl<Entry>(subject, "InputEntry");
+        var entry = ReflectionHelpers.GetNonPublicFieldFromControl<Entry>(subject, "InputEntry");
 
         entry.PlaceholderColor.Should().Be(expected);
       }
@@ -256,7 +256,7 @@ namespace AllOverIt.XamarinForms.Tests.Controls
         var subject = CreatedTitledEntry();
         subject.EntryFontSize = expected;
 
-        var entry = ControlHelpers.GetNonPublicFieldFromControl<Entry>(subject, "InputEntry");
+        var entry = ReflectionHelpers.GetNonPublicFieldFromControl<Entry>(subject, "InputEntry");
 
         entry.FontSize.Should().Be(expected);
       }
@@ -280,7 +280,7 @@ namespace AllOverIt.XamarinForms.Tests.Controls
         var subject = CreatedTitledEntry();
         subject.EntryFontFamily = expected;
 
-        var entry = ControlHelpers.GetNonPublicFieldFromControl<Entry>(subject, "InputEntry");
+        var entry = ReflectionHelpers.GetNonPublicFieldFromControl<Entry>(subject, "InputEntry");
 
         entry.FontFamily.Should().Be(expected);
       }
@@ -304,7 +304,7 @@ namespace AllOverIt.XamarinForms.Tests.Controls
         var subject = CreatedTitledEntry();
         subject.EntryFontAttributes = expected;
 
-        var entry = ControlHelpers.GetNonPublicFieldFromControl<Entry>(subject, "InputEntry");
+        var entry = ReflectionHelpers.GetNonPublicFieldFromControl<Entry>(subject, "InputEntry");
 
         entry.FontAttributes.Should().Be(expected);
       }
@@ -353,7 +353,7 @@ namespace AllOverIt.XamarinForms.Tests.Controls
         var subject = CreatedTitledEntry();
         subject.EntryIsEnabled = expected;
 
-        var entry = ControlHelpers.GetNonPublicFieldFromControl<Entry>(subject, "InputEntry");
+        var entry = ReflectionHelpers.GetNonPublicFieldFromControl<Entry>(subject, "InputEntry");
 
         entry.IsEnabled.Should().Be(expected);
       }
@@ -367,7 +367,7 @@ namespace AllOverIt.XamarinForms.Tests.Controls
 
         subject.EntryIsFocused.Should().BeTrue();
 
-        var entry = ControlHelpers.GetNonPublicFieldFromControl<Entry>(subject, "InputEntry");
+        var entry = ReflectionHelpers.GetNonPublicFieldFromControl<Entry>(subject, "InputEntry");
         entry.IsFocused.Should().BeTrue();
       }
 
@@ -382,7 +382,7 @@ namespace AllOverIt.XamarinForms.Tests.Controls
         subject.EntryUnfocus();
         subject.EntryIsFocused.Should().BeFalse();
 
-        var entry = ControlHelpers.GetNonPublicFieldFromControl<Entry>(subject, "InputEntry");
+        var entry = ReflectionHelpers.GetNonPublicFieldFromControl<Entry>(subject, "InputEntry");
         entry.IsFocused.Should().BeFalse();
       }
 
@@ -396,7 +396,7 @@ namespace AllOverIt.XamarinForms.Tests.Controls
 
         subject.EntryIsPassword.Should().Be(expected);
 
-        var entry = ControlHelpers.GetNonPublicFieldFromControl<Entry>(subject, "InputEntry");
+        var entry = ReflectionHelpers.GetNonPublicFieldFromControl<Entry>(subject, "InputEntry");
         entry.IsPassword.Should().Be(expected);
       }
     }
@@ -546,7 +546,7 @@ namespace AllOverIt.XamarinForms.Tests.Controls
     private static void SetupInputEntryFocus(TitledEntry titledEntry)
     {
       // get the Entry control defined in the XAML
-      var inputEntry = ControlHelpers.GetNonPublicFieldFromControl<Entry>(titledEntry, "InputEntry");
+      var inputEntry = ReflectionHelpers.GetNonPublicFieldFromControl<Entry>(titledEntry, "InputEntry");
 
       EntryUtilities.ConfigureEntryFocus(inputEntry);
     }

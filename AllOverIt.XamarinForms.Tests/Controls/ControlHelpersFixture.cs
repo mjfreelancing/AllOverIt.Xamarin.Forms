@@ -1,4 +1,4 @@
-﻿using AllOverIt.XamarinForms.Controls;
+﻿using AllOverIt.XamarinForms.Helpers;
 using FluentAssertions;
 using Xamarin.Forms;
 using Xunit;
@@ -61,7 +61,7 @@ namespace AllOverIt.XamarinForms.Tests.Controls
       var expected = Create<string>();
       var subject = new DummyPage();
 
-      var entry = ControlHelpers.GetNonPublicFieldFromControl<Entry>(subject, "DummyEntry");
+      var entry = ReflectionHelpers.GetNonPublicFieldFromControl<Entry>(subject, "DummyEntry");
       entry.Text = expected;
 
       subject.EntryText.Should().Be(expected);

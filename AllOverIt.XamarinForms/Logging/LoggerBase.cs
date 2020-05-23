@@ -6,25 +6,23 @@ using System.Threading.Tasks;
 
 namespace AllOverIt.XamarinForms.Logging
 {
+  /// <summary>
+  /// A base logger class that processes messages using a <see cref="BlockingCollection{T}"/>.
+  /// </summary>
   public abstract class LoggerBase : ILogger, IDisposable
   {
     private readonly BlockingCollection<(LogLevel Level, string Message)> _logMessages;
     private readonly Task _loggingTask;
 
+    /// <summary>
+    /// A user-defined tag that can be associated with the logger.
+    /// </summary>
     protected string Tag { get; }
 
-    public LoggerBase()
+    protected LoggerBase()
     {
       _logMessages = new BlockingCollection<(LogLevel, string)>();
-
-      // don't bother disposing of tasks : https://devblogs.microsoft.com/pfxteam/do-i-need-to-dispose-of-tasks/
-      _loggingTask = Task.Factory.StartNew(() =>
-      {
-        foreach (var (level, message) in _logMessages.GetConsumingEnumerable())
-        {
-          LogMessage(level, message);
-        }
-      }, CancellationToken.None, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+      _loggingTask = CreateLoggingTask();
     }
 
     /// <summary>
@@ -84,8 +82,20 @@ namespace AllOverIt.XamarinForms.Logging
         _logMessages.CompleteAdding();
 
         // todo: change class to use IAsyncEnumerable once available and await this task
+        // don't bother disposing of tasks : https://devblogs.microsoft.com/pfxteam/do-i-need-to-dispose-of-tasks/
         _loggingTask.GetAwaiter().GetResult();
       }
+    }
+
+    private Task CreateLoggingTask()
+    {
+      return Task.Factory.StartNew(() =>
+      {
+        foreach (var (level, message) in _logMessages.GetConsumingEnumerable())
+        {
+          LogMessage(level, message);
+        }
+      }, CancellationToken.None, TaskCreationOptions.LongRunning, TaskScheduler.Default);
     }
 
     private void DoLog(LogLevel level, string message)

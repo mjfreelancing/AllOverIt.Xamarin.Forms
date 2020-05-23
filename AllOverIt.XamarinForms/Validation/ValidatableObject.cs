@@ -7,6 +7,10 @@ using System.Runtime.CompilerServices;
 
 namespace AllOverIt.XamarinForms.Validation
 {
+  /// <summary>
+  /// An observable object that is associated with one or more validation rules.
+  /// </summary>
+  /// <typeparam name="TType">The object type.</typeparam>
   public class ValidatableObject<TType> : ObservableObject, IValidatable
   {
     private readonly List<IValidationRule<TType>> _validations;
@@ -14,6 +18,9 @@ namespace AllOverIt.XamarinForms.Validation
     private TType _value;
     private bool _isValid;
 
+    /// <summary>
+    /// Returns all validation errors reported when the object is not in a valid state.
+    /// </summary>
     public IReadOnlyList<string> Errors
     {
       get => _errors;
@@ -23,14 +30,23 @@ namespace AllOverIt.XamarinForms.Validation
       });
     }
 
+    /// <summary>
+    /// Returns the first error reported when the object is not in a valid state.
+    /// </summary>
     public string FirstError => _errors.FirstOrDefault();
 
+    /// <summary>
+    /// The object's current value.
+    /// </summary>
     public TType Value
     {
       get => _value;
       set => SetValue(ref _value, value);
     }
 
+    /// <summary>
+    /// Indicates if the object's current value is considered valid.
+    /// </summary>
     public bool IsValid
     {
       get => _isValid;
@@ -44,6 +60,10 @@ namespace AllOverIt.XamarinForms.Validation
       _isValid = true;
     }
 
+    /// <summary>
+    /// Associates one or more validation rules with the object.
+    /// </summary>
+    /// <param name="rules">The rules to be associated with this object.</param>
     public void AddValidations(params IValidationRule<TType>[] rules)
     {
       _validations.AddRange(rules);

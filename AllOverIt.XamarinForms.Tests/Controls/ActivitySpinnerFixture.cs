@@ -33,7 +33,7 @@ namespace AllOverIt.XamarinForms.Tests.Controls
 
         var subject = new ActivitySpinner { IndicatorColor = expected };
 
-        var spinner = ControlHelpers.GetNonPublicFieldFromControl<ActivityIndicator>(subject, "Spinner");
+        var spinner = ReflectionHelpers.GetNonPublicFieldFromControl<ActivityIndicator>(subject, "Spinner");
 
         spinner.Color.Should().Be(expected);
       }
@@ -58,7 +58,7 @@ namespace AllOverIt.XamarinForms.Tests.Controls
 
         var subject = new ActivitySpinner { Text = expected };
 
-        var label = ControlHelpers.GetNonPublicFieldFromControl<Label>(subject, "SpinnerText");
+        var label = ReflectionHelpers.GetNonPublicFieldFromControl<Label>(subject, "SpinnerText");
 
         label.Text.Should().Be(expected);
       }
@@ -80,7 +80,7 @@ namespace AllOverIt.XamarinForms.Tests.Controls
 
         var subject = new ActivitySpinner { TextColor = expected };
 
-        var label = ControlHelpers.GetNonPublicFieldFromControl<Label>(subject, "SpinnerText");
+        var label = ReflectionHelpers.GetNonPublicFieldFromControl<Label>(subject, "SpinnerText");
 
         label.TextColor.Should().Be(expected);
       }
@@ -102,7 +102,7 @@ namespace AllOverIt.XamarinForms.Tests.Controls
 
         var subject = new ActivitySpinner { TextFontFamily = expected };
 
-        var label = ControlHelpers.GetNonPublicFieldFromControl<Label>(subject, "SpinnerText");
+        var label = ReflectionHelpers.GetNonPublicFieldFromControl<Label>(subject, "SpinnerText");
 
         label.FontFamily.Should().Be(expected);
       }
@@ -124,7 +124,7 @@ namespace AllOverIt.XamarinForms.Tests.Controls
 
         var subject = new ActivitySpinner { TextFontSize = expected };
 
-        var label = ControlHelpers.GetNonPublicFieldFromControl<Label>(subject, "SpinnerText");
+        var label = ReflectionHelpers.GetNonPublicFieldFromControl<Label>(subject, "SpinnerText");
 
         label.FontSize.Should().Be(expected);
       }
@@ -146,7 +146,7 @@ namespace AllOverIt.XamarinForms.Tests.Controls
 
         var subject = new ActivitySpinner { TextFontAttributes = expected };
 
-        var label = ControlHelpers.GetNonPublicFieldFromControl<Label>(subject, "SpinnerText");
+        var label = ReflectionHelpers.GetNonPublicFieldFromControl<Label>(subject, "SpinnerText");
 
         label.FontAttributes.Should().Be(expected);
       }
@@ -175,22 +175,22 @@ namespace AllOverIt.XamarinForms.Tests.Controls
       [Theory]
       [InlineData(false)]
       [InlineData(true)]
-      public void Should_Set_IsLoading(bool expected)
+      public void Should_Set_IsBusy(bool expected)
       {
-        var subject = new ActivitySpinner {IsLoading = expected};
+        var subject = new ActivitySpinner { IsBusy = expected};
 
-        subject.IsLoading.Should().Be(expected);
+        subject.IsBusy.Should().Be(expected);
       }
 
       [Fact]
       public void Should_Set_Spinner_Visibility()
       {
-        var subject = new ActivitySpinner { IsLoading = true };
+        var subject = new ActivitySpinner { IsBusy = true };
 
-        subject.IsLoading.Should().BeTrue();
+        subject.IsBusy.Should().BeTrue();
         subject.IsVisible.Should().BeTrue();
 
-        var spinner = ControlHelpers.GetNonPublicFieldFromControl<ActivityIndicator>(subject, "Spinner");
+        var spinner = ReflectionHelpers.GetNonPublicFieldFromControl<ActivityIndicator>(subject, "Spinner");
 
         spinner.IsRunning.Should().BeTrue();
       }
@@ -198,13 +198,13 @@ namespace AllOverIt.XamarinForms.Tests.Controls
       [Fact]
       public void Should_Toggle_Spinner_Visibility()
       {
-        var subject = new ActivitySpinner {IsLoading = true};
-        subject.IsLoading = false;
+        var subject = new ActivitySpinner { IsBusy = true};
+        subject.IsBusy = false;
 
-        subject.IsLoading.Should().BeFalse();
+        subject.IsBusy.Should().BeFalse();
         subject.IsVisible.Should().BeFalse();
 
-        var spinner = ControlHelpers.GetNonPublicFieldFromControl<ActivityIndicator>(subject, "Spinner");
+        var spinner = ReflectionHelpers.GetNonPublicFieldFromControl<ActivityIndicator>(subject, "Spinner");
 
         spinner.IsRunning.Should().BeFalse();
       }
@@ -218,7 +218,7 @@ namespace AllOverIt.XamarinForms.Tests.Controls
 
         var subject = new ActivitySpinner { Text = text };
 
-        var label = ControlHelpers.GetNonPublicFieldFromControl<Label>(subject, "SpinnerText");
+        var label = ReflectionHelpers.GetNonPublicFieldFromControl<Label>(subject, "SpinnerText");
 
         label.IsVisible.Should().Be(expected);
       }

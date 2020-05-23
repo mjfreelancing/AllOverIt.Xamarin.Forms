@@ -4,6 +4,9 @@ using System.Linq;
 
 namespace AllOverIt.XamarinForms.Validation
 {
+  /// <summary>
+  /// Maintains a registry of objects that can be validated against the rules they are associated with.
+  /// </summary>
   public class ValidatableRegistry : IValidatableRegistry
   {
     private readonly List<IValidatable> _validatables;
